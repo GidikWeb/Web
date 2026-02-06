@@ -1,0 +1,2817 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гидик — AI-проводник по Ивановской области</title>
+    <style>
+        /* ===== CSS ПЕРЕМЕННЫЕ ===== */
+        :root {
+            --primary-dark: #0F2854;
+            --primary-blue: #1C4D8D;
+            --primary-light: #4988C4;
+            --primary-accent: #BDE8F5;
+            --secondary-dark: #0A1D3A;
+            --secondary-blue: #153A70;
+            --white: #FFFFFF;
+            --text-light: #FFFFFF;
+            --text-muted: #BDE8F5;
+            --text-dark: #0A1D3A;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+
+            --gradient-primary: linear-gradient(135deg, #0F2854 0%, #1C4D8D 100%);
+            --gradient-secondary: linear-gradient(135deg, #1C4D8D 0%, #4988C4 100%);
+            --gradient-accent: linear-gradient(135deg, #4988C4 0%, #BDE8F5 100%);
+
+            --shadow-sm: 0 2px 4px rgba(15, 40, 84, 0.1);
+            --shadow-md: 0 4px 6px rgba(15, 40, 84, 0.15);
+            --shadow-lg: 0 10px 15px rgba(15, 40, 84, 0.2);
+            --shadow-xl: 0 20px 25px rgba(15, 40, 84, 0.25);
+
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 20px;
+            --border-radius-2xl: 24px;
+
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        /* ===== СБРОС СТИЛЕЙ ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        input, textarea, select {
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ===== АНИМАЦИИ ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* ===== ОСНОВНЫЕ СТИЛИ ===== */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Шапка */
+        .header {
+            background: var(--primary-dark);
+            padding: 1.5rem 2rem;
+            border-radius: var(--border-radius-xl);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(189, 232, 245, 0.1);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            animation: slideInRight var(--transition-normal);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: transform var(--transition-normal);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo::before {
+            content: '🗺️';
+            font-size: 2.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        .nav {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: rgba(28, 77, 141, 0.8);
+            border: 2px solid var(--primary-accent);
+            color: var(--text-light);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:hover {
+            background: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--text-light);
+        }
+
+        .nav-button.active {
+            background: var(--gradient-secondary);
+            border-color: var(--text-light);
+            box-shadow: 0 0 20px rgba(189, 232, 245, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        /* Экран - общие стили */
+        .screen {
+            display: none;
+            animation: fadeIn var(--transition-normal);
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Кнопка "Назад" */
+        .back-button {
+            background: var(--primary-blue);
+            color: var(--text-light);
+            border: 2px solid var(--primary-accent);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all var(--transition-normal);
+            animation: slideInLeft var(--transition-normal);
+        }
+
+        .back-button:hover {
+            background: var(--primary-dark);
+            transform: translateX(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Основной заголовок */
+        .main-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--primary-accent);
+            border-radius: 2px;
+        }
+
+        /* ===== ГЛАВНЫЙ ЭКРАН ===== */
+        .hero-section {
+            background: var(--gradient-secondary);
+            padding: 4rem 2rem;
+            border-radius: var(--border-radius-xl);
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--primary-accent);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(189, 232, 245, 0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .feature-tags {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .feature-tag {
+            background: rgba(189, 232, 245, 0.2);
+            color: var(--text-light);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            border: 1px solid var(--primary-accent);
+            transition: all var(--transition-normal);
+            animation: fadeIn 0.5s ease-out backwards;
+        }
+
+        .feature-tag:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            background: rgba(189, 232, 245, 0.3);
+        }
+
+        /* Статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: var(--primary-dark);
+            padding: 2rem;
+            border-radius: var(--border-radius-xl);
+            text-align: center;
+            border: 2px solid var(--primary-accent);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out backwards;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--text-light);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-accent);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /* Быстрый старт */
+        .quick-start {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 3rem;
+            background: rgba(10, 29, 58, 0.5);
+            border-radius: var(--border-radius-xl);
+            border: 2px solid var(--primary-accent);
+        }
+
+        .quick-start-title {
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            font-size: 2rem;
+        }
+
+        .quick-start-description {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .quick-start-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ===== КНОПКИ ===== */
+        .button {
+            background: var(--primary-blue);
+            color: var(--text-light);
+            border: 2px solid var(--primary-accent);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--text-light);
+        }
+
+        .button-primary {
+            background: var(--gradient-secondary);
+            border-color: var(--text-light);
+        }
+
+        .button-secondary {
+            background: rgba(28, 77, 141, 0.5);
+            border-color: var(--primary-accent);
+        }
+
+        .button-success {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .button-warning {
+            background: var(--warning);
+            border-color: var(--warning);
+        }
+
+        .button-error {
+            background: var(--error);
+            border-color: var(--error);
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ===== ЭКРАН ГОРОДОВ ===== */
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .city-card {
+            background: var(--primary-dark);
+            border-radius: var(--border-radius-xl);
+            padding: 2rem;
+            border: 2px solid var(--primary-accent);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out backwards;
+        }
+
+        .city-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--text-light);
+        }
+
+        .city-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
+        .city-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .city-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .city-icon {
+            font-size: 2.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        .city-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            color: var(--primary-accent);
+        }
+
+        .rating-stars {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+
+        .city-description {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .city-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .city-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--primary-accent);
+            transition: transform var(--transition-normal);
+        }
+
+        .city-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .city-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .city-actions .button {
+            flex: 1;
+        }
+
+        /* ===== ГЕНЕРАТОР МАРШРУТОВ ===== */
+        .generator-container {
+            background: var(--primary-dark);
+            padding: 2rem;
+            border-radius: var(--border-radius-xl);
+            border: 2px solid var(--primary-accent);
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-select,
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--border-radius-md);
+            background: rgba(10, 29, 58, 0.7);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all var(--transition-normal);
+        }
+
+        .form-select:focus,
+        .form-input:focus {
+            outline: none;
+            border-color: var(--text-light);
+            box-shadow: 0 0 0 3px rgba(189, 232, 245, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .form-select option {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            padding: 0.5rem;
+        }
+
+        .slider-container {
+            margin: 1rem 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(10, 29, 58, 0.7);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-accent);
+            cursor: pointer;
+            border: 2px solid var(--text-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-accent);
+            cursor: pointer;
+            border: 2px solid var(--text-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .slider-value {
+            font-weight: bold;
+            color: var(--primary-accent);
+            font-size: 1.1rem;
+        }
+
+        /* Результат маршрута */
+        .route-result {
+            background: var(--primary-blue);
+            padding: 2rem;
+            border-radius: var(--border-radius-xl);
+            margin-top: 2rem;
+            border: 2px solid var(--primary-accent);
+            display: none;
+            animation: fadeIn var(--transition-normal);
+        }
+
+        .route-result.show {
+            display: block;
+        }
+
+        .route-header {
+            background: rgba(189, 232, 245, 0.1);
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--primary-accent);
+        }
+
+        .route-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .route-info-item {
+            text-align: center;
+        }
+
+        .route-info-label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .route-info-value {
+            display: block;
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .route-points {
+            margin: 1.5rem 0;
+        }
+
+        .route-point {
+            background: rgba(28, 77, 141, 0.3);
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            margin-bottom: 0.5rem;
+            border-left: 4px solid var(--primary-accent);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all var(--transition-normal);
+        }
+
+        .route-point:hover {
+            background: rgba(28, 77, 141, 0.5);
+            transform: translateX(5px);
+        }
+
+        .route-point-number {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .route-point-content {
+            flex: 1;
+        }
+
+        .route-point-title {
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .route-point-details {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .route-tips {
+            background: rgba(189, 232, 245, 0.2);
+            padding: 1.5rem;
+            border-radius: var(--border-radius-md);
+            margin: 1.5rem 0;
+            border: 1px solid var(--primary-accent);
+        }
+
+        .route-tips-title {
+            color: var(--primary-accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .route-tips-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .route-tip-item {
+            color: var(--text-muted);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .route-tip-item::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+
+        .route-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* ===== AI-ГИД ===== */
+        .chat-container {
+            background: var(--primary-dark);
+            border-radius: var(--border-radius-xl);
+            padding: 2rem;
+            border: 2px solid var(--primary-accent);
+            margin-top: 2rem;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(10, 29, 58, 0.5);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--primary-accent);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Стили для скроллбара */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(10, 29, 58, 0.3);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--primary-accent);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            max-width: 85%;
+            animation: fadeIn var(--transition-fast);
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: var(--primary-blue);
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+            border: 1px solid var(--primary-accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ai-message {
+            background: rgba(28, 77, 141, 0.7);
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(189, 232, 245, 0.3);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .typing-indicator {
+            padding: 1rem;
+            color: var(--text-muted);
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(28, 77, 141, 0.3);
+            border-radius: var(--border-radius-md);
+            margin-right: auto;
+            max-width: 150px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-accent);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--primary-accent);
+            border-radius: var(--border-radius-md);
+            background: rgba(10, 29, 58, 0.7);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all var(--transition-normal);
+            resize: none;
+            min-height: 50px;
+            max-height: 150px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--text-light);
+            box-shadow: 0 0 0 3px rgba(189, 232, 245, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .send-button {
+            background: var(--gradient-secondary);
+            color: var(--text-light);
+            border: 2px solid var(--primary-accent);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .send-button:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--text-light);
+        }
+
+        /* Конфигурация API */
+        .config-section {
+            background: var(--primary-dark);
+            padding: 2rem;
+            border-radius: var(--border-radius-xl);
+            border: 2px solid var(--primary-accent);
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .config-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
+        .config-info {
+            background: rgba(28, 77, 141, 0.3);
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            margin: 1rem 0;
+            border: 1px solid var(--primary-accent);
+        }
+
+        .file-input {
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 2px dashed var(--primary-accent);
+            border-radius: var(--border-radius-md);
+            background: rgba(10, 29, 58, 0.5);
+            color: var(--text-light);
+            width: 100%;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            text-align: center;
+        }
+
+        .file-input:hover {
+            border-color: var(--text-light);
+            background: rgba(28, 77, 141, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .file-input::file-selector-button {
+            background: var(--primary-accent);
+            color: var(--primary-dark);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .file-input::file-selector-button:hover {
+            background: var(--text-light);
+        }
+
+        .status-message {
+            padding: 0.75rem;
+            border-radius: var(--border-radius-md);
+            margin-top: 1rem;
+            font-weight: 500;
+            text-align: center;
+            animation: fadeIn var(--transition-fast);
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* ===== КАРТА ===== */
+        .map-container {
+            background: var(--primary-dark);
+            border-radius: var(--border-radius-xl);
+            padding: 2rem;
+            border: 2px solid var(--primary-accent);
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
+        .map-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--primary-accent);
+            transition: transform var(--transition-normal);
+        }
+
+        .map-image:hover {
+            transform: scale(1.01);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .map-overlay {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(15, 40, 84, 0.9);
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--primary-accent);
+            backdrop-filter: blur(10px);
+        }
+
+        .map-title {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .city-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .city-badge {
+            background: var(--gradient-secondary);
+            color: var(--text-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--primary-accent);
+        }
+
+        /* ===== НАСТРОЙКИ ===== */
+        .settings-container {
+            background: var(--primary-dark);
+            padding: 2rem;
+            border-radius: var(--border-radius-xl);
+            border: 2px solid var(--primary-accent);
+            margin-top: 2rem;
+        }
+
+        .settings-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(189, 232, 245, 0.1);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .settings-title {
+            color: var(--primary-accent);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .settings-help {
+            background: rgba(189, 232, 245, 0.1);
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            margin-top: 1rem;
+            border: 1px solid var(--primary-accent);
+        }
+
+        .settings-help-title {
+            color: var(--primary-accent);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .settings-help-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block {
+            background: rgba(10, 29, 58, 0.7);
+            padding: 1rem;
+            border-radius: var(--border-radius-md);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--primary-accent);
+            margin: 1rem 0;
+            border: 1px solid var(--primary-accent);
+            overflow-x: auto;
+        }
+
+        /* ===== МОДАЛЬНОЕ ОКНО ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 29, 58, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn var(--transition-normal);
+        }
+
+        .modal-content {
+            background: var(--primary-dark);
+            border-radius: var(--border-radius-xl);
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 3px solid var(--primary-accent);
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            animation: slideInRight var(--transition-normal);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--primary-accent);
+            font-size: 2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-normal);
+            z-index: 2;
+        }
+
+        .modal-close:hover {
+            background: rgba(189, 232, 245, 0.1);
+            transform: rotate(90deg);
+        }
+
+        /* ===== ЗАГЛУШКИ ДЛЯ ИЗОБРАЖЕНИЙ ===== */
+        .image-placeholder {
+            width: 100%;
+            height: 120px;
+            background: rgba(28, 77, 141, 0.3);
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--primary-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===== ЛОАДЕР ===== */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(189, 232, 245, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-accent);
+            animation: spin 1s linear infinite;
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 1200px) {
+            .app-container {
+                padding: 15px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 1rem;
+                position: static;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav {
+                justify-content: center;
+            }
+
+            .nav-button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+
+            .cities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-messages {
+                height: 300px;
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+
+            .send-button {
+                width: 100%;
+            }
+
+            .city-images {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-start-buttons {
+                flex-direction: column;
+            }
+
+            .city-actions {
+                flex-direction: column;
+            }
+
+            .route-actions {
+                flex-direction: column;
+            }
+
+            .route-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .map-overlay {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                margin-top: 1rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .feature-tags {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .city-card {
+                padding: 1.5rem;
+            }
+
+            .generator-container {
+                padding: 1.5rem;
+            }
+
+            .config-section {
+                padding: 1.5rem;
+            }
+        }
+
+        /* ===== УТИЛИТЫ ===== */
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        .text-accent {
+            color: var(--primary-accent);
+        }
+
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+        .mt-5 { margin-top: 3rem; }
+
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .mb-5 { margin-bottom: 3rem; }
+
+        .p-1 { padding: 0.5rem; }
+        .p-2 { padding: 1rem; }
+        .p-3 { padding: 1.5rem; }
+        .p-4 { padding: 2rem; }
+        .p-5 { padding: 3rem; }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .visible {
+            display: block !important;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-column {
+            flex-direction: column;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-1 { gap: 0.5rem; }
+        .gap-2 { gap: 1rem; }
+        .gap-3 { gap: 1.5rem; }
+        .gap-4 { gap: 2rem; }
+        .gap-5 { gap: 3rem; }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .h-full {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- ШАПКА С НАВИГАЦИЕЙ -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">Гидик</div>
+                <nav class="nav">
+                    <button class="nav-button active" onclick="showScreen('home')">
+                        <span>🏠</span> Главная
+                    </button>
+                    <button class="nav-button" onclick="showScreen('cities')">
+                        <span>🏛️</span> Города
+                    </button>
+                    <button class="nav-button" onclick="showScreen('generator')">
+                        <span>🗺️</span> Маршруты
+                    </button>
+                    <button class="nav-button" onclick="showScreen('ai-guide')">
+                        <span>🤖</span> AI-гид
+                    </button>
+                    <button class="nav-button" onclick="showScreen('map')">
+                        <span>🗺️</span> Карта
+                    </button>
+                    <button class="nav-button" onclick="showScreen('settings')">
+                        <span>⚙️</span> Настройки
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- ГЛАВНЫЙ ЭКРАН -->
+        <section id="home" class="screen active">
+            <div class="hero-section">
+                <h1 class="hero-title">Гидик — AI-проводник по Ивановской области</h1>
+                <p class="hero-subtitle">
+                    Искусственный интеллект создает идеальные маршруты и отвечает на ваши вопросы о городах, достопримечательностях и истории региона
+                </p>
+                <div class="feature-tags">
+                    <span class="feature-tag">🤖 AI-гид онлайн</span>
+                    <span class="feature-tag">🗺️ Умные маршруты</span>
+                    <span class="feature-tag">🏛️ 5 городов</span>
+                    <span class="feature-tag">⭐ Рейтинги и отзывы</span>
+                    <span class="feature-tag">💬 Интерактивный чат</span>
+                    <span class="feature-tag">📱 Адаптивный дизайн</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Городов с AI-гидом</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Достопримечательностей</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Отзывов пользователей</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4.7★</div>
+                    <div class="stat-label">Средний рейтинг</div>
+                </div>
+            </div>
+
+            <div class="quick-start">
+                <h2 class="quick-start-title">🚀 Быстрый старт</h2>
+                <p class="quick-start-description">
+                    Начните с изучения городов или задайте вопрос AI-гиду о любом месте Ивановской области.
+                    Наш искусственный интеллект поможет вам спланировать идеальное путешествие.
+                </p>
+                <div class="quick-start-buttons">
+                    <button class="button button-primary" onclick="showScreen('cities')">
+                        <span>🏛️</span> Исследовать города
+                    </button>
+                    <button class="button" onclick="showScreen('generator')">
+                        <span>🗺️</span> Создать маршрут
+                    </button>
+                    <button class="button" onclick="showScreen('ai-guide')">
+                        <span>🤖</span> Спросить AI-гида
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ЭКРАН ГОРОДОВ -->
+        <section id="cities" class="screen">
+            <button class="back-button" onclick="showScreen('home')">
+                <span>←</span> Назад к главной
+            </button>
+
+            <h2 class="main-title">🏛️ Города Ивановской области</h2>
+
+            <div class="cities-grid" id="citiesGrid">
+                <!-- Города будут загружены через JavaScript -->
+            </div>
+        </section>
+
+        <!-- ГЕНЕРАТОР МАРШРУТОВ -->
+        <section id="generator" class="screen">
+            <button class="back-button" onclick="showScreen('home')">
+                <span>←</span> Назад к главной
+            </button>
+
+            <h2 class="main-title">🗺️ Генератор маршрутов</h2>
+
+            <div class="generator-container">
+                <form id="routeForm">
+                    <div class="form-group">
+                        <label class="form-label">🏙️ Выберите город</label>
+                        <select id="city" class="form-select" required>
+                            <option value="">Выберите город...</option>
+                            <option value="Иваново">Иваново</option>
+                            <option value="Шуя">Шуя</option>
+                            <option value="Кинешма">Кинешма</option>
+                            <option value="Плёс">Плёс</option>
+                            <option value="Палех">Палех</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">🎯 Ваши интересы</label>
+                        <select id="interests" class="form-select" required>
+                            <option value="">Выберите интересы...</option>
+                            <option value="history">🏛️ История и архитектура</option>
+                            <option value="nature">🌳 Природа и парки</option>
+                            <option value="culture">🎭 Культура и музеи</option>
+                            <option value="religion">⛪ Храмы и монастыри</option>
+                            <option value="gastronomy">🍽️ Еда и кафе</option>
+                            <option value="all">🌟 Всё вместе</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">⏱️ Время на осмотр (часы)</label>
+                        <div class="slider-container">
+                            <input type="range" id="time" class="slider" min="1" max="12" value="3"
+                                   oninput="updateTimeValue(this.value)">
+                            <div class="slider-labels">
+                                <span>1 час</span>
+                                <span id="timeValue" class="slider-value">3 часа</span>
+                                <span>12 часов</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">💰 Бюджет на одного человека</label>
+                        <select id="budget" class="form-select">
+                            <option value="free">🎯 Бесплатно</option>
+                            <option value="low">💰 До 500₽</option>
+                            <option value="medium" selected>💵 500-2000₽</option>
+                            <option value="high">💎 Более 2000₽</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="button button-primary w-full mt-3">
+                        <span>✨</span> Сгенерировать персональный маршрут
+                    </button>
+                </form>
+
+                <div id="routeResult" class="route-result">
+                    <!-- Результат маршрута будет загружен через JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- AI-ГИД -->
+        <section id="ai-guide" class="screen">
+            <button class="back-button" onclick="showScreen('home')">
+                <span>←</span> Назад к главной
+            </button>
+
+            <h2 class="main-title">🤖 AI-гид по Ивановской области</h2>
+
+            <div class="config-section" id="apiConfigSection" style="display: none;">
+                <h3 class="settings-title">⚙️ Настройки API</h3>
+                <div id="configInfo"></div>
+                <div id="apiStatus" class="mt-2"></div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">
+                        <strong>👋 Здравствуйте! Я ваш AI-гид по Ивановской области.</strong>
+                        <br><br>
+                        Я помогу вам узнать больше о городах, достопримечательностях, маршрутах и истории региона.
+                        Задайте мне любой вопрос о Ивановской области!
+                        <br><br>
+                        <strong>💡 Примеры вопросов:</strong>
+                        <br>• "Какие достопримечательности посмотреть в Плёсе за один день?"
+                        <br>• "Как добраться из Иваново в Палех общественным транспортом?"
+                        <br>• "Где лучше остановиться на 2 дня в Ивановской области с семьей?"
+                        <br>• "Расскажи об истории текстильной промышленности Иваново"
+                        <br>• "Какие музеи стоит посетить в Шуе?"
+                        <br>• "Что интересного посмотреть в Кинешме?"
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <textarea class="chat-input" id="chatInput"
+                              placeholder="Задайте вопрос о Ивановской области..."
+                              rows="1"
+                              onkeydown="handleChatInputKeydown(event)"
+                              oninput="autoResizeTextarea(this)"></textarea>
+                    <button class="send-button" id="sendButton" onclick="sendMessage()">
+                        <span>Отправить</span>
+                        <span>↗️</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3 class="settings-title">🔑 Настройте API для работы AI-гида</h3>
+                <div class="config-info" id="currentConfigInfo">
+                    <p>API ключ не настроен. Загрузите файл settings.txt</p>
+                </div>
+
+                <div class="mt-3">
+                    <label class="form-label">📁 Загрузить файл настроек (settings.txt)</label>
+                    <input type="file" id="settingsFile" class="file-input"
+                           accept=".txt" onchange="loadSettingsFile(event)">
+                    <p class="text-muted mt-1" style="font-size: 0.9rem;">
+                        Файл должен содержать API ключ в формате: <br>
+                        <code>OPENROUTER_API_KEY=ваш_ключ_здесь</code>
+                    </p>
+                </div>
+
+                <div class="settings-help mt-3">
+                    <h4 class="settings-help-title">💡 Как получить API ключ?</h4>
+                    <p class="settings-help-text">
+                        1. Перейдите на сайт <a href="https://openrouter.ai/" target="_blank" style="color: var(--primary-accent);">OpenRouter.ai</a><br>
+                        2. Зарегистрируйтесь (бесплатно)<br>
+                        3. Создайте API ключ в личном кабинете<br>
+                        4. Сохраните ключ в файл settings.txt
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- КАРТА -->
+        <section id="map" class="screen">
+            <button class="back-button" onclick="showScreen('home')">
+                <span>←</span> Назад к главной
+            </button>
+
+            <h2 class="main-title">🗺️ Карта Ивановской области</h2>
+
+            <div class="map-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Ivanovo_Oblast_map.svg/1200px-Ivanovo_Oblast_map.svg.png"
+                     alt="Карта Ивановской области"
+                     class="map-image"
+                     onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1200 800\"><rect width=\"1200\" height=\"800\" fill=\"%231C4D8D\"/><text x=\"600\" y=\"400\" font-family=\"Arial\" font-size=\"48\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\">Карта Ивановской области</text></svg>'">
+
+                <div class="map-overlay">
+                    <div class="map-title">📍 Основные города области</div>
+                    <div class="city-badges">
+                        <span class="city-badge">Иваново</span>
+                        <span class="city-badge">Шуя</span>
+                        <span class="city-badge">Кинешма</span>
+                        <span class="city-badge">Плёс</span>
+                        <span class="city-badge">Палех</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section mt-4">
+                <h3 class="settings-title">🗺️ О регионах Ивановской области</h3>
+                <p class="text-muted">
+                    Ивановская область расположена в центральной части России, в междуречье Волги и Клязьмы.
+                    Регион богат историческими памятниками, музеями, храмами и природными достопримечательностями.
+                </p>
+            </div>
+        </section>
+
+        <!-- НАСТРОЙКИ -->
+        <section id="settings" class="screen">
+            <button class="back-button" onclick="showScreen('home')">
+                <span>←</span> Назад к главной
+            </button>
+
+            <h2 class="main-title">⚙️ Настройки приложения</h2>
+
+            <div class="settings-container">
+                <div class="settings-section">
+                    <h3 class="settings-title">🔧 Конфигурация AI-гида</h3>
+                    <div id="currentConfig"></div>
+
+                    <div class="mt-3">
+                        <label class="form-label">📁 Загрузить конфигурацию из файла</label>
+                        <input type="file" id="configFile" class="file-input"
+                               accept=".txt" onchange="loadSettingsFile(event)">
+                        <p class="text-muted mt-1" style="font-size: 0.9rem;">
+                            Поддерживаются файлы .txt с переменными: OPENROUTER_API_KEY, MODEL, API_URL
+                        </p>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3 class="settings-title">🔗 Тестирование подключения</h3>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="testApiConnection()" class="button">
+                            <span>🧪</span> Проверить подключение к API
+                        </button>
+                        <span id="connectionStatus" class="status-message">Нажмите для проверки</span>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3 class="settings-title">🔄 Сброс данных</h3>
+                    <div class="flex gap-2 flex-wrap">
+                        <button onclick="clearLocalStorage()" class="button button-warning">
+                            <span>🗑️</span> Очистить локальные данные
+                        </button>
+                        <button onclick="resetApp()" class="button button-error">
+                            <span>🔄</span> Сбросить приложение
+                        </button>
+                    </div>
+                    <p class="text-muted mt-1" style="font-size: 0.9rem;">
+                        Это удалит все сохраненные настройки и вернет приложение к исходному состоянию.
+                    </p>
+                </div>
+
+                <div class="settings-help">
+                    <h4 class="settings-help-title">💡 Справка по настройкам</h4>
+                    <p class="settings-help-text">
+                        Для работы AI-гида необходим API ключ от <a href="https://openrouter.ai/" target="_blank" style="color: var(--primary-accent);">OpenRouter.ai</a>.
+                        Вы можете использовать бесплатные модели или подключить платные для более качественных ответов.
+                    </p>
+
+                    <div class="code-block mt-2">
+                        Пример содержимого settings.txt:<br>
+                        OPENROUTER_API_KEY=sk-or-v1-ваш_ключ_здесь<br>
+                        MODEL=deepseek/deepseek-chat-v3-0324<br>
+                        API_URL=https://openrouter.ai/api/v1/chat/completions
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ===== КОНФИГУРАЦИЯ =====
+        const API_CONFIG = {
+            OPENROUTER_API_KEY: '',
+            MODEL: 'deepseek/deepseek-chat-v3-0324',
+            API_URL: 'https://openrouter.ai/api/v1/chat/completions'
+        };
+
+        // ===== ДАННЫЕ ГОРОДОВ =====
+        const CITIES_DATA = {
+            "Иваново": {
+                icon: "🏭",
+                description: "Столица текстильной промышленности России, известная своей архитектурой конструктивизма и богатой историей. Население: ~400,000 человек.",
+                images: [
+                    "img/Иваново/1.jpg",
+                    "img/Иваново/2.jpg",
+                    "img/Иваново/3.jpg",
+                    "img/Иваново/4.jpg"
+                ],
+                attractions: [
+                    "Щудровская палатка",
+                    "Музей ивановского ситца",
+                    "Свято-Введенский женский монастырь",
+                    "Архитектурный ансамбль площади Революции",
+                    "Дом-корабль",
+                    "Парк им. Степанова",
+                    "Ивановский государственный цирк",
+                    "Музей промышленности и искусства"
+                ],
+                rating: 4.2,
+                reviews: [
+                    { author: "Анна", rating: 5, text: "Прекрасный город с уникальной архитектурой! Особенно понравился музей ситца." },
+                    { author: "Дмитрий", rating: 4, text: "Много интересных мест, но не хватает туристической инфраструктуры." },
+                    { author: "Ольга", rating: 4, text: "Город с богатой историей. Обязательно посетите Свято-Введенский монастырь." }
+                ]
+            },
+            "Шуя": {
+                icon: "🕍",
+                description: "Один из древнейших городов области, известный своей колокольней и мыловаренной промышленностью. Население: ~55,000 человек.",
+                images: [
+                    "img/Шуя/1.jpg",
+                    "img/Шуя/2.jpg",
+                    "img/Шуя/3.jpg",
+                    "img/Шуя/4.jpg"
+                ],
+                attractions: [
+                    "Колокольня Воскресенского собора (106 метров)",
+                    "Литературно-краеведческий музей",
+                    "Музей мыла",
+                    "Городской парк культуры и отдыха",
+                    "Церковь Петра и Павла",
+                    "Шуйский историко-художественный музей",
+                    "Торговые ряды XIX века",
+                    "Дом фабриканта Посылина"
+                ],
+                rating: 4.1,
+                reviews: [
+                    { author: "Елена", rating: 5, text: "Очень колоритный город! Музей мыла - уникальное место!" },
+                    { author: "Алексей", rating: 3, text: "Интересно, но мало современных кафе. Колокольня впечатляет!" },
+                    { author: "Марина", rating: 4, text: "Уютный провинциальный город. Вид с колокольни потрясающий!" }
+                ]
+            },
+            "Кинешма": {
+                icon: "⛵",
+                description: "Второй по величине город области с богатой историей и красивой волжской набережной. Население: ~80,000 человек.",
+                images: [
+                    "img/Кинешма/1.jpg",
+                    "img/Кинешма/2.jpg",
+                    "img/Кинешма/3.jpg",
+                    "img/Кинешма/4.jpg"
+                ],
+                attractions: [
+                    "Волжский бульвар и беседка Островского",
+                    "Кинешемский драматический театр",
+                    "Музей валенок",
+                    "Троицко-Успенский собор",
+                    "Красные и Белые торговые ряды",
+                    "Парк культуры и отдыха им. 35-летия Победы",
+                    "Музей истории Кинешмы",
+                    "Церковь Вознесения Господня"
+                ],
+                rating: 4.0,
+                reviews: [
+                    { author: "Михаил", rating: 4, text: "Уютный город с интересной историей. Набережная - просто сказка!" },
+                    { author: "Светлана", rating: 5, text: "Обязательно посетите музей валенок - это уникально!" },
+                    { author: "Игорь", rating: 4, text: "Хорошее место для спокойного отдыха. Красивая архитектура." }
+                ]
+            },
+            "Плёс": {
+                icon: "🎨",
+                description: "Живописный город на Волге, вдохновлявший многих русских художников, включая Левитана. Население: ~2,000 человек.",
+                images: [
+                    "img/Плёс/1.jpg",
+                    "img/Плёс/2.jpg",
+                    "img/Плёс/3.jpg",
+                    "img/Плёс/4.jpg"
+                ],
+                attractions: [
+                    "Волжская набережная и Соборная гора",
+                    "Дом-музей Исаака Левитана",
+                    "Музей пейзажа",
+                    "Успенский собор XVII века",
+                    "Смотровые площадки на Волгу",
+                    "Церковь Воскресения Христова",
+                    "Музей древнерусской семьи",
+                    "Художественные галереи и сувенирные лавки"
+                ],
+                rating: 4.8,
+                reviews: [
+                    { author: "Ольга", rating: 5, text: "Невероятно красивое место! Воздух чистый, виды завораживающие." },
+                    { author: "Сергей", rating: 5, text: "Идеальное место для отдыха от городской суеты. Обязательно вернусь!" },
+                    { author: "Татьяна", rating: 5, text: "Самый живописный город на Волге! Музеи прекрасны." }
+                ]
+            },
+            "Палех": {
+                icon: "🖌️",
+                description: "Всемирно известный центр лаковой миниатюры и иконописи, город-музей под открытым небом. Население: ~5,000 человек.",
+                images: [
+                    "img/Палех/1.jpg",
+                    "img/Палех/2.jpg",
+                    "img/Палех/3.jpg",
+                    "img/Палех/4.jpg"
+                ],
+                attractions: [
+                    "Государственный музей палехского искусства",
+                    "Дом-музей П.Д. Корина",
+                    "Крестовоздвиженский храм",
+                    "Мастерские палехских художников",
+                    "Сувенирные лавки с авторскими работами",
+                    "Музей иконы",
+                    "Художественное училище",
+                    "Галерея современной палехской миниатюры"
+                ],
+                rating: 4.6,
+                reviews: [
+                    { author: "Татьяна", rating: 5, text: "Волшебное место! Искусство палехской миниатюры поражает." },
+                    { author: "Виктор", rating: 4, text: "Уникальный город с богатыми традициями. Музей - сокровищница русской культуры." },
+                    { author: "Елена", rating: 5, text: "Невероятная концентрация таланта! Визит в мастерские оставил незабываемые впечатления." }
+                ]
+            }
+        };
+
+        // ===== ПЕРЕМЕННЫЕ =====
+        let currentApiKey = '';
+        let chatHistory = [];
+        let currentCityModal = '';
+
+        // ===== УТИЛИТЫ =====
+        function getHoursEnding(hours) {
+            if (hours % 10 === 1 && hours % 100 !== 11) return 'час';
+            if (hours % 10 >= 2 && hours % 10 <= 4 && (hours % 100 < 10 || hours % 100 >= 20)) return 'часа';
+            return 'часов';
+        }
+
+        function renderStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) stars += '★';
+                else if (i === fullStars && hasHalfStar) stars += '★';
+                else stars += '☆';
+            }
+            return stars;
+        }
+
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+        }
+
+        // ===== НАВИГАЦИЯ =====
+        function showScreen(screenId) {
+            // Скрыть все экраны
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            // Показать выбранный экран
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+            }
+
+            // Обновить активную кнопку в навигации
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            const activeButton = Array.from(document.querySelectorAll('.nav-button')).find(btn =>
+                btn.getAttribute('onclick')?.includes(`'${screenId}'`)
+            );
+
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+
+            // Инициализация экранов
+            switch(screenId) {
+                case 'cities':
+                    renderCities();
+                    break;
+                case 'ai-guide':
+                    updateApiConfigDisplay();
+                    setTimeout(() => document.getElementById('chatInput')?.focus(), 100);
+                    break;
+                case 'settings':
+                    showCurrentConfig();
+                    break;
+                case 'generator':
+                    updateTimeValue(3);
+                    break;
+            }
+        }
+
+        // ===== ОБНОВЛЕНИЕ ЗНАЧЕНИЯ ВРЕМЕНИ =====
+        function updateTimeValue(value) {
+            const hours = parseInt(value);
+            document.getElementById('timeValue').textContent = `${hours} ${getHoursEnding(hours)}`;
+        }
+
+        // ===== ЗАГРУЗКА НАСТРОЕК =====
+        function loadSettingsFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result.trim();
+                    console.log('File content:', content);
+
+                    let apiKey = '';
+
+                    // Парсинг разных форматов файла
+                    if (content.includes('OPENROUTER_API_KEY=')) {
+                        const match = content.match(/OPENROUTER_API_KEY=([^\n\r]+)/);
+                        apiKey = match ? match[1].trim() : '';
+                    } else if (content.includes('API_KEY=')) {
+                        const match = content.match(/API_KEY=([^\n\r]+)/);
+                        apiKey = match ? match[1].trim() : '';
+                    } else {
+                        // Просто ключ на первой строке
+                        apiKey = content.split('\n')[0].trim();
+                    }
+
+                    console.log('Extracted API key:', apiKey);
+
+                    if (apiKey && apiKey.length > 20) {
+                        currentApiKey = apiKey;
+                        API_CONFIG.OPENROUTER_API_KEY = apiKey;
+
+                        // Сохраняем в localStorage
+                        localStorage.setItem('gidik_api_config', JSON.stringify({
+                            apiKey: apiKey,
+                            timestamp: new Date().toISOString()
+                        }));
+
+                        // Обновляем отображение
+                        updateApiConfigDisplay();
+                        showCurrentConfig();
+
+                        // Показываем сообщение об успехе
+                        showStatusMessage('API ключ успешно загружен', 'success');
+
+                        // Показываем секцию настроек API
+                        const apiConfigSection = document.getElementById('apiConfigSection');
+                        if (apiConfigSection) {
+                            apiConfigSection.style.display = 'block';
+                        }
+
+                        // Автоматически тестируем подключение
+                        setTimeout(() => testApiConnection(), 1000);
+                    } else {
+                        throw new Error('Неверный формат API ключа. Ключ должен быть длиннее 20 символов.');
+                    }
+                } catch (error) {
+                    console.error('Error loading settings:', error);
+                    showStatusMessage(`Ошибка: ${error.message}`, 'error');
+                }
+            };
+
+            reader.onerror = function() {
+                showStatusMessage('Ошибка чтения файла', 'error');
+            };
+
+            reader.readAsText(file);
+        }
+
+        function showStatusMessage(message, type = 'info') {
+            const statusElement = document.getElementById('apiStatus') || document.getElementById('connectionStatus');
+            if (statusElement) {
+                statusElement.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+                setTimeout(() => {
+                    statusElement.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        // ===== ОТОБРАЖЕНИЕ КОНФИГУРАЦИИ =====
+        function updateApiConfigDisplay() {
+            // Загружаем из localStorage
+            const savedConfig = localStorage.getItem('gidik_api_config');
+            if (savedConfig) {
+                try {
+                    const config = JSON.parse(savedConfig);
+                    currentApiKey = config.apiKey || '';
+                    API_CONFIG.OPENROUTER_API_KEY = currentApiKey;
+                } catch (error) {
+                    console.error('Error loading config:', error);
+                }
+            }
+
+            const configInfo = document.getElementById('configInfo');
+            const currentConfigInfo = document.getElementById('currentConfigInfo');
+
+            if (currentApiKey) {
+                const maskedKey = currentApiKey.substring(0, 8) + '...' + currentApiKey.substring(currentApiKey.length - 4);
+                const infoHTML = `
+                    <div><strong>🔑 API Key:</strong> ${maskedKey}</div>
+                    <div><strong>🤖 Model:</strong> ${API_CONFIG.MODEL}</div>
+                    <div><strong>🔗 Status:</strong> <span style="color: #10B981;">✓ Настроено</span></div>
+                `;
+
+                if (configInfo) configInfo.innerHTML = infoHTML;
+                if (currentConfigInfo) currentConfigInfo.innerHTML = infoHTML;
+            } else {
+                const errorHTML = '<div style="color: #EF4444;">❌ API ключ не настроен</div>';
+                if (configInfo) configInfo.innerHTML = errorHTML;
+                if (currentConfigInfo) currentConfigInfo.innerHTML = errorHTML;
+            }
+        }
+
+        function showCurrentConfig() {
+            updateApiConfigDisplay();
+            const currentConfig = document.getElementById('currentConfig');
+            if (currentConfig) {
+                if (currentApiKey) {
+                    const maskedKey = currentApiKey.substring(0, 8) + '...' + currentApiKey.substring(currentApiKey.length - 4);
+                    currentConfig.innerHTML = `
+                        <div class="config-info">
+                            <div><strong>🔑 API Key:</strong> ${maskedKey}</div>
+                            <div><strong>🤖 Model:</strong> ${API_CONFIG.MODEL}</div>
+                            <div><strong>🔗 API URL:</strong> ${API_CONFIG.API_URL}</div>
+                        </div>
+                    `;
+                } else {
+                    currentConfig.innerHTML = '<div class="config-info" style="color: #EF4444;">❌ API ключ не настроен. Загрузите файл настроек.</div>';
+                }
+            }
+        }
+
+        // ===== ТЕСТИРОВАНИЕ API =====
+        async function testApiConnection() {
+            if (!currentApiKey) {
+                showStatusMessage('API ключ не настроен', 'error');
+                return;
+            }
+
+            showStatusMessage('Проверка подключения...', 'warning');
+
+            try {
+                // Простой запрос для проверки подключения
+                const response = await fetch(API_CONFIG.API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentApiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: API_CONFIG.MODEL,
+                        messages: [{ role: "user", content: "Привет" }],
+                        max_tokens: 10
+                    })
+                });
+
+                if (response.ok) {
+                    showStatusMessage('✅ Подключение к API успешно установлено', 'success');
+                } else {
+                    const error = await response.text();
+                    console.error('API Error:', error);
+                    showStatusMessage(`❌ Ошибка API: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                console.error('Connection error:', error);
+                showStatusMessage(`❌ Ошибка сети: ${error.message}`, 'error');
+            }
+        }
+
+        // ===== ОТРИСОВКА ГОРОДОВ =====
+        function renderCities() {
+            const grid = document.getElementById('citiesGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            Object.entries(CITIES_DATA).forEach(([cityName, cityData], index) => {
+                const cityCard = document.createElement('div');
+                cityCard.className = 'city-card';
+                cityCard.style.animationDelay = `${index * 0.1}s`;
+
+                // Создаем изображения с заглушками
+                const imagesHTML = cityData.images.map((imgSrc, i) => `
+                    <img src="${imgSrc}"
+                         alt="${cityName} - фото ${i + 1}"
+                         class="city-image"
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"200\"><rect width=\"300\" height=\"200\" fill=\"%231C4D8D\"/><text x=\"150\" y=\"100\" font-family=\"Arial\" font-size=\"20\" fill=\"white\" text-anchor=\"middle\" dominant-baseline=\"middle\">${cityName}</text></svg>'">
+                `).join('');
+
+                cityCard.innerHTML = `
+                    <div class="city-header">
+                        <div>
+                            <div class="city-name">${cityName}</div>
+                            <div class="city-rating">
+                                <span class="rating-stars">${renderStars(cityData.rating)}</span>
+                                <span>${cityData.rating.toFixed(1)}</span>
+                            </div>
+                        </div>
+                        <div class="city-icon">${cityData.icon}</div>
+                    </div>
+
+                    <div class="city-description">${cityData.description}</div>
+
+                    <div class="city-images">${imagesHTML}</div>
+
+                    <div class="city-actions">
+                        <button class="button" onclick="openCityModal('${cityName}')">
+                            <span>📝</span> Подробнее
+                        </button>
+                        <button class="button button-primary" onclick="generateCityRoute('${cityName}')">
+                            <span>🗺️</span> Маршрут
+                        </button>
+                    </div>
+                `;
+
+                grid.appendChild(cityCard);
+            });
+        }
+
+        // ===== МОДАЛЬНОЕ ОКНО ГОРОДА =====
+        function openCityModal(cityName) {
+            const cityData = CITIES_DATA[cityName];
+            if (!cityData) return;
+
+            currentCityModal = cityName;
+
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modalContent');
+
+            modalContent.innerHTML = `
+                <h2 style="color: var(--text-light); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    ${cityData.icon} ${cityName}
+                </h2>
+
+                <div class="city-rating" style="margin: 1rem 0; font-size: 1.2rem;">
+                    <span class="rating-stars">${renderStars(cityData.rating)}</span>
+                    <span>${cityData.rating.toFixed(1)} из 5 (${cityData.reviews.length} отзывов)</span>
+                </div>
+
+                <div style="margin: 1.5rem 0;">
+                    <h3 style="color: var(--primary-accent); margin-bottom: 1rem;">🏛️ Достопримечательности:</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem;">
+                        ${cityData.attractions.map(attr => `
+                            <div style="background: rgba(189, 232, 245, 0.1); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--primary-accent);">
+                                • ${attr}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div style="margin: 1.5rem 0;">
+                    <h3 style="color: var(--primary-accent); margin-bottom: 1rem;">⭐ Отзывы посетителей:</h3>
+                    ${cityData.reviews.map(review => `
+                        <div style="background: rgba(28, 77, 141, 0.3); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border: 1px solid var(--primary-accent);">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <strong style="color: var(--primary-accent);">👤 ${review.author}</strong>
+                                <span class="rating-stars">${renderStars(review.rating)}</span>
+                            </div>
+                            <div style="color: var(--text-muted);">${review.text}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="button" onclick="generateCityRoute('${cityName}'); closeModal();" style="flex: 1;">
+                        <span>🗺️</span> Создать маршрут
+                    </button>
+                    <button class="button button-primary" onclick="showScreen('ai-guide'); closeModal();" style="flex: 1;">
+                        <span>🤖</span> Спросить AI
+                    </button>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            currentCityModal = '';
+        }
+
+        // ===== ГЕНЕРАЦИЯ МАРШРУТА ДЛЯ ГОРОДА =====
+        function generateCityRoute(cityName) {
+            showScreen('generator');
+
+            const citySelect = document.getElementById('city');
+            if (citySelect) {
+                citySelect.value = cityName;
+            }
+
+            setTimeout(() => {
+                const form = document.getElementById('routeForm');
+                if (form) {
+                    form.dispatchEvent(new Event('submit'));
+                }
+            }, 100);
+        }
+
+        // ===== ГЕНЕРАТОР МАРШРУТОВ =====
+        document.getElementById('routeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const city = document.getElementById('city').value;
+            const interests = document.getElementById('interests').value;
+            const time = parseInt(document.getElementById('time').value);
+            const budget = document.getElementById('budget').value;
+
+            const cityData = CITIES_DATA[city];
+            if (!cityData) {
+                alert('Выберите город');
+                return;
+            }
+
+            // Расчет количества достопримечательностей
+            const attractionsCount = Math.min(Math.floor(time / 0.5), 8);
+            const selectedAttractions = cityData.attractions.slice(0, attractionsCount);
+
+            const interestsText = {
+                history: "🏛️ История и архитектура",
+                nature: "🌳 Природа и парки",
+                culture: "🎭 Культура и музеи",
+                religion: "⛪ Храмы и монастыри",
+                gastronomy: "🍽️ Еда и кафе",
+                all: "🌟 Всё вместе"
+            };
+
+            const budgetText = {
+                free: "🎯 Бесплатно",
+                low: "💰 До 500₽",
+                medium: "💵 500-2000₽",
+                high: "💎 Более 2000₽"
+            };
+
+            const routeContent = `
+                <div class="route-header">
+                    <div class="route-info-grid">
+                        <div class="route-info-item">
+                            <span class="route-info-label">📍 Город</span>
+                            <span class="route-info-value">${city}</span>
+                        </div>
+                        <div class="route-info-item">
+                            <span class="route-info-label">🎯 Интересы</span>
+                            <span class="route-info-value">${interestsText[interests] || interests}</span>
+                        </div>
+                        <div class="route-info-item">
+                            <span class="route-info-label">⏱️ Время</span>
+                            <span class="route-info-value">${time} ${getHoursEnding(time)}</span>
+                        </div>
+                        <div class="route-info-item">
+                            <span class="route-info-label">💰 Бюджет</span>
+                            <span class="route-info-value">${budgetText[budget] || budget}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--primary-accent); margin-bottom: 1rem;">🗺️ Маршрут осмотра:</h3>
+
+                <div class="route-points">
+                    ${selectedAttractions.map((attr, index) => `
+                        <div class="route-point">
+                            <div class="route-point-number">${index + 1}</div>
+                            <div class="route-point-content">
+                                <div class="route-point-title">${attr}</div>
+                                <div class="route-point-details">
+                                    <span>⏱️ ~${Math.floor(time/selectedAttractions.length*60)} мин</span>
+                                    <span>${budget === 'free' ? 'Бесплатно' : '~' + (budget === 'low' ? '100-300₽' : budget === 'medium' ? '300-800₽' : '800-1500₽')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="route-tips">
+                    <h4 class="route-tips-title"><span>💡</span> Советы для оптимального маршрута</h4>
+                    <ul class="route-tips-list">
+                        <li class="route-tip-item">Начните маршрут в 9-10 утра, чтобы избежать толпы</li>
+                        <li class="route-tip-item">Носите удобную обувь - предстоит много ходить</li>
+                        <li class="route-tip-item">Возьмите с собой воду и легкий перекус</li>
+                        <li class="route-tip-item">Проверьте время работы музеев и достопримечательностей</li>
+                        <li class="route-tip-item">Используйте местный транспорт между удаленными точками</li>
+                        <li class="route-tip-item">Сделайте перерыв на обед в местных кафе</li>
+                    </ul>
+                </div>
+
+                <div class="route-actions">
+                    <button class="button" onclick="saveRoute('${city}')" style="flex: 1;">
+                        <span>💾</span> Сохранить маршрут
+                    </button>
+                    <button class="button button-primary" onclick="askAboutRoute('${city}')" style="flex: 1;">
+                        <span>🤖</span> Спросить AI
+                    </button>
+                </div>
+            `;
+
+            const routeResult = document.getElementById('routeResult');
+            if (routeResult) {
+                routeResult.innerHTML = routeContent;
+                routeResult.classList.add('show');
+
+                // Прокрутка к результату
+                setTimeout(() => {
+                    routeResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        });
+
+        function askAboutRoute(cityName) {
+            showScreen('ai-guide');
+            setTimeout(() => {
+                const chatInput = document.getElementById('chatInput');
+                if (chatInput) {
+                    chatInput.value = `Расскажи подробнее о маршруте по ${cityName}`;
+                    chatInput.focus();
+                    autoResizeTextarea(chatInput);
+                }
+            }, 100);
+        }
+
+        function saveRoute(cityName) {
+            const routeContent = document.querySelector('#routeResult .route-header')?.innerText || '';
+            const routeDetails = document.querySelector('#routeResult .route-points')?.innerText || '';
+
+            const fullContent = `МАРШРУТ ПО ${cityName.toUpperCase()}\n\n${routeContent}\n\n${routeDetails}`;
+
+            const blob = new Blob([fullContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `маршрут-${cityName}-${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showStatusMessage('Маршрут сохранен в файл!', 'success');
+        }
+
+        // ===== AI-ГИД =====
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            const sendButton = document.getElementById('sendButton');
+
+            if (!message) {
+                input.focus();
+                return;
+            }
+
+            if (!currentApiKey) {
+                alert('Пожалуйста, сначала загрузите API ключ в настройках');
+                showScreen('settings');
+                return;
+            }
+
+            // Добавление сообщения пользователя
+            addChatMessage(message, 'user');
+            input.value = '';
+            sendButton.disabled = true;
+            input.disabled = true;
+            autoResizeTextarea(input);
+
+            // Индикатор набора
+            const typingIndicator = addTypingIndicator();
+
+            try {
+                // Подготовка сообщений с историей
+                const messages = [
+                    {
+                        role: "system",
+                        content: `Ты профессиональный гид-экскурсовод по Ивановской области России.
+                        Отвечай на русском языке. Будь дружелюбным, информативным и полезным.
+
+                        Информация о городах Ивановской области:
+
+                        ${Object.entries(CITIES_DATA).map(([city, data]) =>
+                            `Город: ${city}
+                            Описание: ${data.description}
+                            Основные достопримечательности: ${data.attractions.slice(0, 5).join(', ')}
+                            Рейтинг: ${data.rating} из 5
+                            ---`
+                        ).join('\n\n')}
+
+                        Правила ответа:
+                        1. Отвечай подробно, но структурированно
+                        2. Предлагай конкретные маршруты и рекомендации
+                        3. Учитывай время года и погоду в рекомендациях
+                        4. Упоминай практическую информацию (время работы, цены, как добраться)
+                        5. Если вопрос не связан с Ивановской областью, вежливо предложи вернуться к теме региона
+                        6. Используй эмодзи для наглядности
+                        7. Форматируй ответ с помощью маркеров и абзацев`
+                    },
+                    ...chatHistory.slice(-5), // Берем последние 5 сообщений из истории
+                    { role: "user", content: message }
+                ];
+
+                const response = await fetch(API_CONFIG.API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentApiKey}`,
+                        'Content-Type': 'application/json',
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Гидик - AI-проводник'
+                    },
+                    body: JSON.stringify({
+                        model: API_CONFIG.MODEL,
+                        messages: messages,
+                        max_tokens: 1500,
+                        temperature: 0.7
+                    })
+                });
+
+                // Удаление индикатора набора
+                removeTypingIndicator(typingIndicator);
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const aiResponse = result.choices[0]?.message?.content || 'Извините, не удалось получить ответ.';
+
+                    // Добавление ответа AI в чат
+                    addChatMessage(aiResponse, 'ai');
+
+                    // Сохранение в историю
+                    chatHistory.push({ role: "user", content: message });
+                    chatHistory.push({ role: "assistant", content: aiResponse });
+
+                    // Ограничение истории
+                    if (chatHistory.length > 20) {
+                        chatHistory = chatHistory.slice(-20);
+                    }
+                } else {
+                    const error = await response.text();
+                    console.error('API Error:', error);
+                    addChatMessage(`Извините, произошла ошибка при обращении к AI. Код ошибки: ${response.status}`, 'ai');
+                }
+            } catch (error) {
+                removeTypingIndicator(typingIndicator);
+                addChatMessage(`Ошибка сети: ${error.message}. Проверьте подключение к интернету.`, 'ai');
+            } finally {
+                sendButton.disabled = false;
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        function addChatMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            if (!messagesContainer) return;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+
+            // Форматирование текста
+            const formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n\n/g, '<br><br>')
+                .replace(/\n/g, '<br>');
+
+            messageDiv.innerHTML = formattedText;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            if (!messagesContainer) return null;
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <span>AI думает</span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return typingDiv;
+        }
+
+        function removeTypingIndicator(typingElement) {
+            if (typingElement && typingElement.parentNode) {
+                typingElement.parentNode.removeChild(typingElement);
+            }
+        }
+
+        function handleChatInputKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // ===== УПРАВЛЕНИЕ ДАННЫМИ =====
+        function clearLocalStorage() {
+            if (confirm('Вы уверены, что хотите очистить все локальные данные?')) {
+                localStorage.removeItem('gidik_api_config');
+                currentApiKey = '';
+                chatHistory = [];
+                updateApiConfigDisplay();
+                showStatusMessage('Локальные данные очищены', 'success');
+            }
+        }
+
+        function resetApp() {
+            if (confirm('Вы уверены, что хотите сбросить приложение к начальным настройкам?')) {
+                localStorage.clear();
+                currentApiKey = '';
+                chatHistory = [];
+                API_CONFIG.OPENROUTER_API_KEY = '';
+
+                // Сброс формы
+                document.getElementById('routeForm')?.reset();
+                document.getElementById('chatInput').value = '';
+                document.getElementById('chatMessages').innerHTML = `
+                    <div class="message ai-message">
+                        <strong>👋 Здравствуйте! Я ваш AI-гид по Ивановской области.</strong>
+                        <br><br>
+                        Я помогу вам узнать больше о городах, достопримечательностях, маршрутах и истории региона.
+                        Задайте мне любой вопрос о Ивановской области!
+                    </div>
+                `;
+
+                updateApiConfigDisplay();
+                showStatusMessage('Приложение сброшено к начальным настройкам', 'success');
+                showScreen('home');
+            }
+        }
+
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загрузка сохраненной конфигурации
+            const savedConfig = localStorage.getItem('gidik_api_config');
+            if (savedConfig) {
+                try {
+                    const config = JSON.parse(savedConfig);
+                    currentApiKey = config.apiKey || '';
+                    API_CONFIG.OPENROUTER_API_KEY = currentApiKey;
+
+                    if (currentApiKey) {
+                        const apiConfigSection = document.getElementById('apiConfigSection');
+                        if (apiConfigSection) {
+                            apiConfigSection.style.display = 'block';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading config:', error);
+                }
+            }
+
+            // Инициализация
+            renderCities();
+            updateTimeValue(3);
+            updateApiConfigDisplay();
+
+            // Фокус на поле ввода при открытии AI-гида
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('focus', function() {
+                    if (!currentApiKey) {
+                        this.placeholder = "⚠️ Сначала загрузите API ключ в настройках...";
+                    }
+                });
+
+                chatInput.addEventListener('blur', function() {
+                    this.placeholder = "Задайте вопрос о Ивановской области...";
+                });
+            }
+
+            // Закрытие модального окна
+            document.getElementById('modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            // Автофокус на поле ввода в AI-гиде
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const screenId = this.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+                    if (screenId === 'ai-guide') {
+                        setTimeout(() => {
+                            const chatInput = document.getElementById('chatInput');
+                            if (chatInput) chatInput.focus();
+                        }, 300);
+                    }
+                });
+            });
+
+            // Инициализация слайдера времени
+            const timeSlider = document.getElementById('time');
+            if (timeSlider) {
+                timeSlider.addEventListener('input', function() {
+                    updateTimeValue(this.value);
+                });
+            }
+
+            console.log('Приложение "Гидик" успешно инициализировано');
+        });
+    </script>
+</body>
+</html>

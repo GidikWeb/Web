@@ -24,6 +24,7 @@
             --gradient-primary: linear-gradient(135deg, #0F2854 0%, #1C4D8D 100%);
             --gradient-secondary: linear-gradient(135deg, #1C4D8D 0%, #4988C4 100%);
             --gradient-accent: linear-gradient(135deg, #4988C4 0%, #BDE8F5 100%);
+            --gradient-hero: linear-gradient(135deg, #0F2854 0%, #1C4D8D 50%, #4988C4 100%);
 
             --shadow-sm: 0 2px 4px rgba(15, 40, 84, 0.1);
             --shadow-md: 0 4px 6px rgba(15, 40, 84, 0.15);
@@ -180,7 +181,7 @@
                 transform: translateY(0);
             }
             50% {
-                transform: translateY(-5px);
+                transform: translateY(-8px);
             }
         }
 
@@ -190,6 +191,17 @@
             }
             30% {
                 transform: translateY(-6px);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
         }
 
@@ -425,8 +437,8 @@
 
         /* ===== ГЛАВНЫЙ ЭКРАН ===== */
         .hero-section {
-            background: var(--gradient-secondary);
-            padding: 2rem 1.5rem;
+            background: var(--gradient-hero);
+            padding: 2.5rem 1.5rem;
             border-radius: var(--border-radius-xl);
             margin-bottom: 2rem;
             text-align: center;
@@ -438,7 +450,7 @@
 
         @media (max-width: 480px) {
             .hero-section {
-                padding: 1.5rem 1rem;
+                padding: 1.75rem 1rem;
                 margin-bottom: 1.5rem;
             }
         }
@@ -450,17 +462,17 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(189, 232, 245, 0.1) 50%, transparent 70%);
-            animation: shimmer 3s infinite;
+            background: linear-gradient(45deg, transparent 30%, rgba(189, 232, 245, 0.15) 50%, transparent 70%);
+            animation: shimmer 4s infinite linear;
         }
 
         .hero-title {
-            font-size: 2rem;
+            font-size: 2.25rem;
             margin-bottom: 1rem;
             color: var(--text-light);
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             position: relative;
-            animation: float 3s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
             line-height: 1.2;
         }
 
@@ -473,20 +485,29 @@
         @media (max-width: 480px) {
             .hero-title {
                 font-size: 1.5rem;
+                margin-bottom: 0.75rem;
             }
         }
 
         .hero-subtitle {
-            font-size: 1rem;
+            font-size: 1.125rem;
             color: var(--text-muted);
             max-width: 800px;
             margin: 0 auto 1.5rem;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        @media (max-width: 480px) {
+            .hero-subtitle {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
         }
 
         .feature-tags {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
             justify-content: center;
             flex-wrap: wrap;
             margin-top: 1.5rem;
@@ -495,12 +516,13 @@
         .feature-tag {
             background: rgba(189, 232, 245, 0.2);
             color: var(--text-light);
-            padding: 0.375rem 0.75rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
-            font-size: 0.8rem;
+            font-size: 0.875rem;
             border: 1px solid var(--primary-accent);
             transition: all var(--transition-normal);
             animation: fadeIn 0.5s ease-out backwards;
+            backdrop-filter: blur(10px);
         }
 
         .feature-tag:hover {
@@ -521,12 +543,13 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.75rem;
+                margin: 1.5rem 0;
             }
         }
 
         .stat-card {
             background: var(--primary-dark);
-            padding: 1.5rem;
+            padding: 1.75rem 1.5rem;
             border-radius: var(--border-radius-lg);
             text-align: center;
             border: 2px solid var(--primary-accent);
@@ -553,7 +576,7 @@
         }
 
         .stat-number {
-            font-size: 2.5rem;
+            font-size: 2.75rem;
             font-weight: 800;
             color: var(--primary-accent);
             margin-bottom: 0.375rem;
@@ -562,50 +585,84 @@
 
         @media (max-width: 480px) {
             .stat-number {
-                font-size: 2rem;
+                font-size: 2.25rem;
             }
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
+            font-weight: 500;
         }
 
         /* Быстрый старт */
         .quick-start {
             text-align: center;
             margin-top: 2rem;
-            padding: 2rem;
+            padding: 2.5rem;
             background: rgba(10, 29, 58, 0.5);
             border-radius: var(--border-radius-xl);
             border: 2px solid var(--primary-accent);
+            position: relative;
+            overflow: hidden;
         }
 
         @media (max-width: 480px) {
             .quick-start {
-                padding: 1.5rem 1rem;
+                padding: 1.75rem 1rem;
+                margin-top: 1.5rem;
             }
+        }
+
+        .quick-start::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
         }
 
         .quick-start-title {
             margin-bottom: 1rem;
             color: var(--text-light);
-            font-size: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 480px) {
+            .quick-start-title {
+                font-size: 1.5rem;
+            }
         }
 
         .quick-start-description {
             color: var(--text-muted);
             max-width: 600px;
-            margin: 0 auto 1.5rem;
-            font-size: 1rem;
-            line-height: 1.5;
+            margin: 0 auto 1.75rem;
+            font-size: 1.125rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .quick-start-description {
+                font-size: 1rem;
+                line-height: 1.5;
+            }
         }
 
         .quick-start-buttons {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
+        }
+
+        @media (max-width: 480px) {
+            .quick-start-buttons {
+                gap: 0.75rem;
+            }
         }
 
         /* ===== КНОПКИ - мобильная оптимизация ===== */
@@ -613,7 +670,7 @@
             background: var(--primary-blue);
             color: var(--text-light);
             border: 2px solid var(--primary-accent);
-            padding: 0.75rem 1.25rem;
+            padding: 0.875rem 1.5rem;
             border-radius: var(--border-radius-md);
             font-weight: 600;
             transition: all var(--transition-normal);
@@ -624,9 +681,9 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            min-height: 44px;
-            min-width: 44px;
-            font-size: 0.95rem;
+            min-height: 48px;
+            min-width: 48px;
+            font-size: 1rem;
         }
 
         .button::before {
@@ -690,8 +747,8 @@
         /* Мобильные кнопки */
         @media (max-width: 768px) {
             .button {
-                padding: 0.75rem 1rem;
-                font-size: 0.9rem;
+                padding: 0.75rem 1.25rem;
+                font-size: 0.95rem;
                 min-height: 48px;
             }
             
@@ -719,7 +776,7 @@
         .city-card {
             background: var(--primary-dark);
             border-radius: var(--border-radius-xl);
-            padding: 1.5rem;
+            padding: 1.75rem;
             border: 2px solid var(--primary-accent);
             transition: all var(--transition-normal);
             position: relative;
@@ -747,51 +804,51 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
 
         .city-name {
-            font-size: 1.5rem;
+            font-size: 1.625rem;
             font-weight: 700;
             color: var(--text-light);
-            margin-bottom: 0.375rem;
+            margin-bottom: 0.5rem;
         }
 
         .city-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             animation: bounce 2s infinite;
         }
 
         .city-rating {
             display: flex;
             align-items: center;
-            gap: 0.375rem;
-            margin: 0.375rem 0;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
             color: var(--primary-accent);
         }
 
         .rating-stars {
             color: #FFD700;
-            font-size: 1rem;
+            font-size: 1.125rem;
         }
 
         .city-description {
             color: var(--text-muted);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
         .city-images {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-            margin: 0.75rem 0;
+            gap: 0.75rem;
+            margin: 1rem 0;
         }
 
         .city-image {
             width: 100%;
-            height: 100px;
+            height: 120px;
             object-fit: cover;
             border-radius: var(--border-radius-md);
             border: 1px solid var(--primary-accent);
@@ -809,14 +866,14 @@
             }
             
             .city-image {
-                height: 120px;
+                height: 140px;
             }
         }
 
         .city-actions {
             display: flex;
             gap: 0.75rem;
-            margin-top: 1rem;
+            margin-top: 1.25rem;
         }
 
         .city-actions .button {
@@ -832,25 +889,37 @@
         /* ===== ГЕНЕРАТОР МАРШРУТОВ ===== */
         .generator-container {
             background: var(--primary-dark);
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: var(--border-radius-xl);
             border: 2px solid var(--primary-accent);
             margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
         }
 
         @media (max-width: 480px) {
             .generator-container {
-                padding: 1rem;
+                padding: 1.5rem 1rem;
             }
         }
 
+        .generator-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 0.375rem;
+            margin-bottom: 0.5rem;
             color: var(--text-muted);
             font-weight: 600;
             font-size: 1rem;
@@ -860,7 +929,7 @@
         .form-input,
         .form-textarea {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1.25rem;
             border: 2px solid var(--primary-accent);
             border-radius: var(--border-radius-md);
             background: rgba(10, 29, 58, 0.7);
@@ -884,9 +953,9 @@
         .form-select {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23BDE8F5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1rem;
-            padding-right: 3rem;
+            background-position: right 1.25rem center;
+            background-size: 1.25rem;
+            padding-right: 3.5rem;
         }
 
         .form-select option {
@@ -896,64 +965,64 @@
         }
 
         .slider-container {
-            margin: 0.75rem 0;
+            margin: 1rem 0;
         }
 
         .slider {
             width: 100%;
-            height: 8px;
+            height: 10px;
             -webkit-appearance: none;
             appearance: none;
             background: rgba(10, 29, 58, 0.7);
-            border-radius: 4px;
+            border-radius: 5px;
             outline: none;
         }
 
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: var(--primary-accent);
             cursor: pointer;
-            border: 2px solid var(--text-light);
+            border: 3px solid var(--text-light);
             box-shadow: var(--shadow-md);
         }
 
         .slider::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: var(--primary-accent);
             cursor: pointer;
-            border: 2px solid var(--text-light);
+            border: 3px solid var(--text-light);
             box-shadow: var(--shadow-md);
         }
 
         .slider-labels {
             display: flex;
             justify-content: space-between;
-            margin-top: 0.5rem;
+            margin-top: 0.75rem;
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         .slider-value {
             font-weight: bold;
             color: var(--primary-accent);
-            font-size: 1rem;
+            font-size: 1.125rem;
         }
 
         /* Результат маршрута */
         .route-result {
             background: var(--primary-blue);
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: var(--border-radius-xl);
             margin-top: 1.5rem;
             border: 2px solid var(--primary-accent);
             display: none;
-            animation: fadeIn var(--transition-normal);
+            animation: scaleIn var(--transition-normal);
         }
 
         .route-result.show {
@@ -962,16 +1031,16 @@
 
         .route-header {
             background: rgba(189, 232, 245, 0.1);
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: var(--border-radius-md);
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
             border: 1px solid var(--primary-accent);
         }
 
         .route-info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 0.75rem;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
         }
 
         .route-info-item {
@@ -981,50 +1050,50 @@
         .route-info-label {
             display: block;
             color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            margin-bottom: 0.375rem;
         }
 
         .route-info-value {
             display: block;
             color: var(--text-light);
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.125rem;
         }
 
         .route-points {
-            margin: 1.25rem 0;
+            margin: 1.5rem 0;
         }
 
         .route-point {
             background: rgba(28, 77, 141, 0.3);
-            padding: 1rem;
+            padding: 1.25rem;
             border-radius: var(--border-radius-md);
-            margin-bottom: 0.5rem;
-            border-left: 4px solid var(--primary-accent);
+            margin-bottom: 0.75rem;
+            border-left: 6px solid var(--primary-accent);
             display: flex;
             align-items: flex-start;
-            gap: 0.75rem;
+            gap: 1rem;
             transition: all var(--transition-normal);
         }
 
         .route-point:hover {
             background: rgba(28, 77, 141, 0.5);
-            transform: translateX(3px);
+            transform: translateX(5px);
         }
 
         .route-point-number {
             background: var(--primary-accent);
             color: var(--primary-dark);
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             flex-shrink: 0;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         .route-point-content {
@@ -1034,34 +1103,34 @@
         .route-point-title {
             color: var(--text-light);
             font-weight: 600;
-            margin-bottom: 0.25rem;
-            font-size: 0.95rem;
+            margin-bottom: 0.375rem;
+            font-size: 1.05rem;
         }
 
         .route-point-details {
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .route-tips {
             background: rgba(189, 232, 245, 0.2);
-            padding: 1.25rem;
+            padding: 1.5rem;
             border-radius: var(--border-radius-md);
-            margin: 1.25rem 0;
+            margin: 1.5rem 0;
             border: 1px solid var(--primary-accent);
         }
 
         .route-tips-title {
             color: var(--primary-accent);
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
+            gap: 0.75rem;
+            font-size: 1.125rem;
         }
 
         .route-tips-list {
@@ -1071,22 +1140,23 @@
 
         .route-tip-item {
             color: var(--text-muted);
-            padding: 0.375rem 0;
-            padding-left: 1.5rem;
+            padding: 0.5rem 0;
+            padding-left: 2rem;
             position: relative;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .route-tip-item::before {
             content: '💡';
             position: absolute;
             left: 0;
+            font-size: 1.125rem;
         }
 
         .route-actions {
             display: flex;
-            gap: 0.75rem;
-            margin-top: 1.25rem;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
         @media (max-width: 480px) {
@@ -1099,56 +1169,69 @@
         .chat-container {
             background: var(--primary-dark);
             border-radius: var(--border-radius-xl);
-            padding: 1.5rem;
+            padding: 2rem;
             border: 2px solid var(--primary-accent);
             margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
         }
 
         @media (max-width: 480px) {
             .chat-container {
-                padding: 1rem;
+                padding: 1.5rem 1rem;
             }
         }
 
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
         .chat-messages {
-            height: 350px;
+            height: 400px;
             overflow-y: auto;
-            margin-bottom: 1.25rem;
-            padding: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
             background: rgba(10, 29, 58, 0.5);
             border-radius: var(--border-radius-lg);
             border: 1px solid var(--primary-accent);
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 1rem;
         }
 
         @media (max-width: 768px) {
             .chat-messages {
-                height: 300px;
+                height: 350px;
             }
         }
 
         @media (max-width: 480px) {
             .chat-messages {
-                height: 250px;
-                padding: 0.75rem;
+                height: 300px;
+                padding: 1.25rem;
+                gap: 0.875rem;
             }
         }
 
         /* Стили для скроллбара */
         .chat-messages::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
 
         .chat-messages::-webkit-scrollbar-track {
             background: rgba(10, 29, 58, 0.3);
-            border-radius: 3px;
+            border-radius: 4px;
         }
 
         .chat-messages::-webkit-scrollbar-thumb {
             background: var(--primary-accent);
-            border-radius: 3px;
+            border-radius: 4px;
         }
 
         .chat-messages::-webkit-scrollbar-thumb:hover {
@@ -1156,18 +1239,19 @@
         }
 
         .message {
-            padding: 0.875rem;
+            padding: 1.25rem;
             border-radius: var(--border-radius-md);
-            max-width: 90%;
+            max-width: 85%;
             animation: fadeIn var(--transition-fast);
             word-wrap: break-word;
-            line-height: 1.4;
+            line-height: 1.5;
+            font-size: 1rem;
         }
 
         .user-message {
             background: var(--primary-blue);
             margin-left: auto;
-            border-bottom-right-radius: 4px;
+            border-bottom-right-radius: 8px;
             border: 1px solid var(--primary-accent);
             box-shadow: var(--shadow-sm);
         }
@@ -1175,28 +1259,28 @@
         .ai-message {
             background: rgba(28, 77, 141, 0.7);
             margin-right: auto;
-            border-bottom-left-radius: 4px;
+            border-bottom-left-radius: 8px;
             border: 1px solid rgba(189, 232, 245, 0.3);
             box-shadow: var(--shadow-sm);
         }
 
         .typing-indicator {
-            padding: 0.875rem;
+            padding: 1rem;
             color: var(--text-muted);
             font-style: italic;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             background: rgba(28, 77, 141, 0.3);
             border-radius: var(--border-radius-md);
             margin-right: auto;
-            max-width: 130px;
-            font-size: 0.9rem;
+            max-width: 150px;
+            font-size: 0.95rem;
         }
 
         .typing-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: var(--primary-accent);
             border-radius: 50%;
             animation: typingAnimation 1.4s infinite ease-in-out;
@@ -1212,7 +1296,7 @@
 
         .chat-input-container {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
             align-items: flex-end;
         }
 
@@ -1224,17 +1308,17 @@
 
         .chat-input {
             flex: 1;
-            padding: 0.75rem 1rem;
+            padding: 1rem 1.25rem;
             border: 2px solid var(--primary-accent);
             border-radius: var(--border-radius-md);
             background: rgba(10, 29, 58, 0.7);
             color: var(--text-light);
-            font-size: 1rem;
+            font-size: 1.05rem;
             transition: all var(--transition-normal);
             resize: none;
-            min-height: 50px;
-            max-height: 120px;
-            line-height: 1.4;
+            min-height: 60px;
+            max-height: 150px;
+            line-height: 1.5;
         }
 
         .chat-input:focus {
@@ -1246,7 +1330,7 @@
 
         @media (max-width: 480px) {
             .chat-input {
-                min-height: 60px;
+                min-height: 70px;
                 width: 100%;
             }
         }
@@ -1255,16 +1339,17 @@
             background: var(--gradient-secondary);
             color: var(--text-light);
             border: 2px solid var(--primary-accent);
-            padding: 0.75rem 1.25rem;
+            padding: 1rem 1.75rem;
             border-radius: var(--border-radius-md);
             font-weight: 600;
             transition: all var(--transition-normal);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            min-width: 100px;
+            gap: 0.75rem;
+            min-width: 120px;
             justify-content: center;
-            min-height: 50px;
+            min-height: 60px;
+            font-size: 1.05rem;
         }
 
         .send-button:hover:not(:disabled) {
@@ -1277,22 +1362,28 @@
         @media (max-width: 480px) {
             .send-button {
                 width: 100%;
-                min-height: 48px;
+                min-height: 58px;
             }
         }
 
-        /* Конфигурация API */
-        .config-section {
+        /* Карта */
+        .map-container {
             background: var(--primary-dark);
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: var(--border-radius-xl);
             border: 2px solid var(--primary-accent);
-            margin: 1.5rem 0;
+            margin-top: 1.5rem;
             position: relative;
             overflow: hidden;
         }
 
-        .config-section::before {
+        @media (max-width: 480px) {
+            .map-container {
+                padding: 1.5rem;
+            }
+        }
+
+        .map-container::before {
             content: '';
             position: absolute;
             top: 0;
@@ -1302,64 +1393,126 @@
             background: var(--gradient-accent);
         }
 
+        .map-placeholder {
+            height: 400px;
+            background: rgba(28, 77, 141, 0.3);
+            border-radius: var(--border-radius-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            border: 2px dashed var(--primary-accent);
+            text-align: center;
+            padding: 2rem;
+        }
+
         @media (max-width: 480px) {
-            .config-section {
-                padding: 1rem;
+            .map-placeholder {
+                height: 300px;
+                font-size: 1.25rem;
+                padding: 1.5rem;
             }
         }
 
-        .config-info {
-            background: rgba(28, 77, 141, 0.3);
-            padding: 0.875rem;
-            border-radius: var(--border-radius-md);
-            margin: 0.75rem 0;
-            border: 1px solid var(--primary-accent);
-            font-size: 0.9rem;
+        .city-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.5rem;
         }
 
-        .file-input {
-            margin: 0.75rem 0;
-            padding: 0.875rem;
-            border: 2px dashed var(--primary-accent);
-            border-radius: var(--border-radius-md);
-            background: rgba(10, 29, 58, 0.5);
+        .city-badge {
+            background: rgba(189, 232, 245, 0.2);
             color: var(--text-light);
-            width: 100%;
-            cursor: pointer;
+            padding: 0.625rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            border: 1px solid var(--primary-accent);
             transition: all var(--transition-normal);
-            text-align: center;
-            font-size: 0.9rem;
         }
 
-        .file-input:hover {
-            border-color: var(--text-light);
-            background: rgba(28, 77, 141, 0.3);
+        .city-badge:hover {
+            background: rgba(189, 232, 245, 0.3);
             transform: translateY(-2px);
         }
 
-        .file-input::file-selector-button {
-            background: var(--primary-accent);
-            color: var(--primary-dark);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius-sm);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-normal);
+        /* ===== НАСТРОЙКИ ===== */
+        .settings-container {
+            background: var(--primary-dark);
+            padding: 2rem;
+            border-radius: var(--border-radius-xl);
+            border: 2px solid var(--primary-accent);
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        .file-input::file-selector-button:hover {
-            background: var(--text-light);
+        @media (max-width: 480px) {
+            .settings-container {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        .settings-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-accent);
+        }
+
+        .settings-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(189, 232, 245, 0.1);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .settings-title {
+            color: var(--primary-accent);
+            margin-bottom: 1rem;
+            font-size: 1.375rem;
+        }
+
+        .settings-help {
+            background: rgba(189, 232, 245, 0.1);
+            padding: 1.5rem;
+            border-radius: var(--border-radius-md);
+            margin-top: 1rem;
+            border: 1px solid var(--primary-accent);
+        }
+
+        .settings-help-title {
+            color: var(--primary-accent);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .settings-help-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         .status-message {
-            padding: 0.75rem;
+            padding: 1rem;
             border-radius: var(--border-radius-md);
-            margin-top: 0.75rem;
+            margin-top: 1rem;
             font-weight: 500;
             text-align: center;
             animation: fadeIn var(--transition-fast);
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         .status-success {
@@ -1380,74 +1533,6 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
-        /* ===== НАСТРОЙКИ ===== */
-        .settings-container {
-            background: var(--primary-dark);
-            padding: 1.5rem;
-            border-radius: var(--border-radius-xl);
-            border: 2px solid var(--primary-accent);
-            margin-top: 1.5rem;
-        }
-
-        @media (max-width: 480px) {
-            .settings-container {
-                padding: 1rem;
-            }
-        }
-
-        .settings-section {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(189, 232, 245, 0.1);
-        }
-
-        .settings-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .settings-title {
-            color: var(--primary-accent);
-            margin-bottom: 0.75rem;
-            font-size: 1.2rem;
-        }
-
-        .settings-help {
-            background: rgba(189, 232, 245, 0.1);
-            padding: 0.875rem;
-            border-radius: var(--border-radius-md);
-            margin-top: 0.75rem;
-            border: 1px solid var(--primary-accent);
-        }
-
-        .settings-help-title {
-            color: var(--primary-accent);
-            margin-bottom: 0.375rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .settings-help-text {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-
-        .code-block {
-            background: rgba(10, 29, 58, 0.7);
-            padding: 0.875rem;
-            border-radius: var(--border-radius-md);
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            color: var(--primary-accent);
-            margin: 0.75rem 0;
-            border: 1px solid var(--primary-accent);
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-
         /* ===== МОДАЛЬНОЕ ОКНО ===== */
         .modal {
             display: none;
@@ -1460,15 +1545,15 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
             animation: fadeIn var(--transition-normal);
-            padding: 0.75rem;
+            padding: 1rem;
         }
 
         .modal-content {
             background: var(--primary-dark);
-            border-radius: var(--border-radius-lg);
-            padding: 1.5rem;
+            border-radius: var(--border-radius-xl);
+            padding: 2.5rem;
             max-width: 800px;
             width: 100%;
             max-height: 90vh;
@@ -1476,27 +1561,27 @@
             border: 3px solid var(--primary-accent);
             box-shadow: var(--shadow-xl);
             position: relative;
-            animation: slideInRight var(--transition-normal);
+            animation: scaleIn var(--transition-normal);
         }
 
         @media (max-width: 480px) {
             .modal-content {
-                padding: 1rem;
+                padding: 1.75rem 1.5rem;
                 max-height: 85vh;
             }
         }
 
         .modal-close {
             position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
+            top: 1rem;
+            right: 1rem;
             background: none;
             border: none;
             color: var(--primary-accent);
-            font-size: 1.75rem;
+            font-size: 2rem;
             cursor: pointer;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1513,8 +1598,8 @@
         /* ===== ЛОАДЕР ===== */
         .loader {
             display: inline-block;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border: 3px solid rgba(189, 232, 245, 0.3);
             border-radius: 50%;
             border-top-color: var(--primary-accent);
@@ -1779,7 +1864,7 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="button button-primary w-full mt-3">
+                    <button type="submit" class="button button-primary w-full mt-4">
                         <span>✨</span> Сгенерировать персональный маршрут
                     </button>
                 </form>
@@ -1797,54 +1882,6 @@
             </button>
 
             <h2 class="main-title">🤖 AI-гид по Ивановской области</h2>
-
-            <div class="config-section" id="apiConfigSection">
-                <h3 class="settings-title">⚙️ Настройки AI-гида</h3>
-                <div class="config-info" id="currentConfigInfo">
-                    <p>API ключ не настроен. Загрузите файл settings.txt или введите ключ вручную</p>
-                </div>
-
-                <div class="flex flex-column gap-2">
-                    <div class="form-group">
-                        <label class="form-label">🔑 Введите API ключ вручную</label>
-                        <input type="password" id="manualApiKey" class="form-input" 
-                               placeholder="sk-or-v1-ваш_ключ_здесь">
-                        <button class="button mt-2 w-full" onclick="saveManualApiKey()">
-                            <span>💾</span> Сохранить ключ
-                        </button>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">📁 Или загрузите файл настроек</label>
-                        <input type="file" id="settingsFile" class="file-input"
-                               accept=".txt" onchange="loadSettingsFile(event)">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">🤖 Выберите модель</label>
-                        <select id="aiModel" class="form-select">
-                            <option value="arcee-ai/trinity-large-preview:free">Arcee Ai (рекомендуется)</option>
-                            <option value="tngtech/deepseek-r1t2-chimera:free">Deepseek R1T2</option>
-                            <option value="z-ai/glm-4.5-air:free">Z.AI</option>
-                            <option value="deepseek/deepseek-r1-0528:free">Deepseek R1</option>
-                            <option value="qwen/qwen3-4b:free">Qwen 3</option>
-                            <option value="nvidia/nemotron-3-nano-30b-a3b:free">Nemotron 3 Nano</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label flex items-center gap-2">
-                            <input type="checkbox" id="enableReasoning" checked>
-                            <span>🧠 Включить расширенное мышление (reasoning)</span>
-                        </label>
-                        <p class="text-muted mt-1" style="font-size: 0.85rem;">
-                            Позволяет AI "думать" шаг за шагом для более качественных ответов
-                        </p>
-                    </div>
-                </div>
-
-                <div id="apiStatus" class="mt-2"></div>
-            </div>
 
             <div class="chat-container">
                 <div class="chat-messages" id="chatMessages">
@@ -1886,17 +1923,15 @@
 
             <h2 class="main-title">🗺️ Карта Ивановской области</h2>
 
-            <div class="config-section">
-                <div class="map-container">
-                    <div id="mapPlaceholder" class="image-placeholder" style="height: 300px;">
-                        🗺️ Карта Ивановской области
-                        <div class="city-badges mt-2">
-                            <span class="city-badge">Иваново</span>
-                            <span class="city-badge">Шуя</span>
-                            <span class="city-badge">Кинешма</span>
-                            <span class="city-badge">Плёс</span>
-                            <span class="city-badge">Палех</span>
-                        </div>
+            <div class="map-container">
+                <div class="map-placeholder">
+                    🗺️ Карта Ивановской области
+                    <div class="city-badges mt-4">
+                        <span class="city-badge">Иваново</span>
+                        <span class="city-badge">Шуя</span>
+                        <span class="city-badge">Кинешма</span>
+                        <span class="city-badge">Плёс</span>
+                        <span class="city-badge">Палех</span>
                     </div>
                 </div>
             </div>
@@ -1912,28 +1947,16 @@
 
             <div class="settings-container">
                 <div class="settings-section">
-                    <h3 class="settings-title">🔧 Конфигурация AI-гида</h3>
-                    <div id="currentConfig"></div>
-
-                    <div class="mt-3">
-                        <label class="form-label">📁 Загрузить конфигурацию из файла</label>
-                        <input type="file" id="configFile" class="file-input"
-                               accept=".txt" onchange="loadSettingsFile(event)">
+                    <h3 class="settings-title">🔧 Конфигурация приложения</h3>
+                    <div class="config-info">
+                        <div><strong>🤖 AI Модель:</strong> DeepSeek R1</div>
+                        <div><strong>🧠 Режим мышления:</strong> Включен</div>
+                        <div><strong>🔗 API:</strong> Настроено автоматически</div>
                     </div>
                 </div>
 
                 <div class="settings-section">
-                    <h3 class="settings-title">🔗 Тестирование подключения</h3>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <button onclick="testApiConnection()" class="button">
-                            <span>🧪</span> Проверить подключение к API
-                        </button>
-                        <span id="connectionStatus" class="status-message">Нажмите для проверки</span>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <h3 class="settings-title">🔄 Сброс данных</h3>
+                    <h3 class="settings-title">🔄 Управление данными</h3>
                     <div class="flex gap-2 flex-wrap">
                         <button onclick="clearChatHistory()" class="button button-warning">
                             <span>🗑️</span> Очистить историю чата
@@ -1947,19 +1970,24 @@
                     </div>
                 </div>
 
-                <div class="settings-help">
-                    <h4 class="settings-help-title">💡 Справка по настройкам</h4>
-                    <p class="settings-help-text">
-                        Для работы AI-гида необходим API ключ от <a href="https://openrouter.ai/" target="_blank" style="color: var(--primary-accent);">OpenRouter.ai</a>.
-                        Вы можете использовать бесплатные модели или подключить платные для более качественных ответов.
-                    </p>
-
-                    <div class="code-block mt-2">
-                        Пример содержимого settings.txt:<br>
-                        OPENROUTER_API_KEY=sk-or-v1-ваш_ключ_здесь<br>
-                        MODEL=deepseek/deepseek-chat-v3-0324:free<br>
-                        REASONING=true
+                <div class="settings-section">
+                    <h3 class="settings-title">📊 Информация о приложении</h3>
+                    <div class="settings-help">
+                        <p class="settings-help-text">
+                            <strong>Гидик v2.0</strong><br>
+                            AI-проводник по Ивановской области<br>
+                            Все функции AI-гида работают автоматически<br>
+                            Для работы используется модель DeepSeek R1
+                        </p>
                     </div>
+                </div>
+
+                <div class="settings-help">
+                    <h4 class="settings-help-title">💡 Справка</h4>
+                    <p class="settings-help-text">
+                        AI-гид автоматически настроен и готов к работе.<br>
+                        Просто задайте вопрос о любом городе или достопримечательности Ивановской области.
+                    </p>
                 </div>
             </div>
         </section>
@@ -1976,8 +2004,8 @@
     <script>
         // ===== КОНФИГУРАЦИЯ =====
         const API_CONFIG = {
-            OPENROUTER_API_KEY: '',
-            MODEL: 'deepseek/deepseek-chat-v3-0324:free',
+            OPENROUTER_API_KEY: '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', // API ключ зашит прямо в коде
+            MODEL: 'arcee-ai/trinity-large-preview:free',
             API_URL: 'https://openrouter.ai/api/v1/chat/completions',
             REASONING: true
         };
@@ -2117,7 +2145,6 @@
         };
 
         // ===== ПЕРЕМЕННЫЕ =====
-        let currentApiKey = '';
         let chatHistory = [];
         let currentCityModal = '';
         let isMobileMenuOpen = false;
@@ -2143,7 +2170,7 @@
 
         function autoResizeTextarea(textarea) {
             textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+            textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
         }
 
         function toggleMobileMenu() {
@@ -2163,246 +2190,19 @@
             }
         }
 
-        // ===== ЗАГРУЗКА НАСТРОЕК ИЗ ФАЙЛА =====
-        async function loadSettingsFromFile() {
-            try {
-                const response = await fetch('settings.txt');
-                if (!response.ok) {
-                    console.log('Файл settings.txt не найден');
-                    return false;
-                }
-                
-                const content = await response.text();
-                parseSettingsContent(content);
-                return true;
-            } catch (error) {
-                console.log('Ошибка загрузки settings.txt:', error);
-                return false;
-            }
-        }
-
-        function parseSettingsContent(content) {
-            const lines = content.split('\n');
-            let settings = {
-                OPENROUTER_API_KEY: '',
-                MODEL: API_CONFIG.MODEL,
-                REASONING: API_CONFIG.REASONING
-            };
-
-            lines.forEach(line => {
-                line = line.trim();
-                if (!line || line.startsWith('#')) return;
-
-                const [key, ...valueParts] = line.split('=');
-                if (key && valueParts.length > 0) {
-                    const value = valueParts.join('=').trim();
-                    
-                    switch(key.trim()) {
-                        case 'OPENROUTER_API_KEY':
-                            settings.OPENROUTER_API_KEY = value;
-                            break;
-                        case 'MODEL':
-                            settings.MODEL = value;
-                            break;
-                        case 'REASONING':
-                            settings.REASONING = value.toLowerCase() === 'true';
-                            break;
-                    }
-                }
-            });
-
-            // Применяем настройки
-            if (settings.OPENROUTER_API_KEY) {
-                currentApiKey = settings.OPENROUTER_API_KEY;
-                API_CONFIG.OPENROUTER_API_KEY = settings.OPENROUTER_API_KEY;
-                
-                // Сохраняем в localStorage
-                localStorage.setItem('gidik_api_config', JSON.stringify({
-                    apiKey: settings.OPENROUTER_API_KEY,
-                    model: settings.MODEL,
-                    reasoning: settings.REASONING,
-                    timestamp: new Date().toISOString()
-                }));
-            }
-
-            // Обновляем UI
-            updateApiConfigDisplay();
-            
-            // Устанавливаем выбранную модель
-            const modelSelect = document.getElementById('aiModel');
-            if (modelSelect && settings.MODEL) {
-                modelSelect.value = settings.MODEL;
-            }
-            
-            // Устанавливаем состояние reasoning
-            const reasoningCheckbox = document.getElementById('enableReasoning');
-            if (reasoningCheckbox) {
-                reasoningCheckbox.checked = settings.REASONING;
-                API_CONFIG.REASONING = settings.REASONING;
-            }
-
-            if (settings.OPENROUTER_API_KEY) {
-                showStatusMessage('Настройки загружены из файла settings.txt', 'success');
-            }
-        }
-
-        // ===== ОБРАБОТКА ЗАГРУЗКИ ФАЙЛА =====
-        function loadSettingsFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    parseSettingsContent(e.target.result);
-                    showStatusMessage('Настройки успешно загружены из файла', 'success');
-                } catch (error) {
-                    console.error('Ошибка загрузки файла:', error);
-                    showStatusMessage('Ошибка загрузки файла', 'error');
-                }
-            };
-            reader.onerror = function() {
-                showStatusMessage('Ошибка чтения файла', 'error');
-            };
-            reader.readAsText(file);
-        }
-
-        function saveManualApiKey() {
-            const manualApiKeyInput = document.getElementById('manualApiKey');
-            const apiKey = manualApiKeyInput.value.trim();
-            
-            if (!apiKey) {
-                showStatusMessage('Введите API ключ', 'error');
-                return;
-            }
-            
-            if (apiKey.length < 20) {
-                showStatusMessage('API ключ слишком короткий', 'error');
-                return;
-            }
-            
-            currentApiKey = apiKey;
-            API_CONFIG.OPENROUTER_API_KEY = apiKey;
-            
-            // Сохраняем в localStorage
-            localStorage.setItem('gidik_api_config', JSON.stringify({
-                apiKey: apiKey,
-                model: document.getElementById('aiModel').value,
-                reasoning: document.getElementById('enableReasoning').checked,
-                timestamp: new Date().toISOString()
-            }));
-            
-            updateApiConfigDisplay();
-            showStatusMessage('API ключ успешно сохранен', 'success');
-            
-            // Очищаем поле
-            manualApiKeyInput.value = '';
-        }
-
         function showStatusMessage(message, type = 'info') {
-            const statusElement = document.getElementById('apiStatus') || document.getElementById('connectionStatus');
-            if (statusElement) {
-                statusElement.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+            const statusElement = document.createElement('div');
+            statusElement.className = `status-message status-${type}`;
+            statusElement.textContent = message;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                chatMessages.appendChild(statusElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
                 setTimeout(() => {
-                    statusElement.innerHTML = '';
+                    statusElement.remove();
                 }, 5000);
-            }
-        }
-
-        // ===== ОБНОВЛЕНИЕ ОТОБРАЖЕНИЯ КОНФИГУРАЦИИ =====
-        function updateApiConfigDisplay() {
-            const savedConfig = localStorage.getItem('gidik_api_config');
-            if (savedConfig) {
-                try {
-                    const config = JSON.parse(savedConfig);
-                    currentApiKey = config.apiKey || '';
-                    API_CONFIG.OPENROUTER_API_KEY = currentApiKey;
-                    API_CONFIG.MODEL = config.model || API_CONFIG.MODEL;
-                    API_CONFIG.REASONING = config.reasoning !== undefined ? config.reasoning : API_CONFIG.REASONING;
-                    
-                    // Обновляем UI элементы
-                    const modelSelect = document.getElementById('aiModel');
-                    const reasoningCheckbox = document.getElementById('enableReasoning');
-                    
-                    if (modelSelect && config.model) {
-                        modelSelect.value = config.model;
-                    }
-                    
-                    if (reasoningCheckbox) {
-                        reasoningCheckbox.checked = API_CONFIG.REASONING;
-                    }
-                } catch (error) {
-                    console.error('Ошибка загрузки конфигурации:', error);
-                }
-            }
-
-            const configInfo = document.getElementById('configInfo');
-            const currentConfigInfo = document.getElementById('currentConfigInfo');
-            const currentConfig = document.getElementById('currentConfig');
-
-            if (currentApiKey) {
-                const maskedKey = currentApiKey.substring(0, 10) + '...' + currentApiKey.substring(currentApiKey.length - 6);
-                const infoHTML = `
-                    <div><strong>🔑 API Key:</strong> ${maskedKey}</div>
-                    <div><strong>🤖 Model:</strong> ${API_CONFIG.MODEL}</div>
-                    <div><strong>🧠 Reasoning:</strong> ${API_CONFIG.REASONING ? 'Включено' : 'Выключено'}</div>
-                    <div><strong>🔗 Status:</strong> <span style="color: #10B981;">✓ Настроено</span></div>
-                `;
-
-                if (configInfo) configInfo.innerHTML = infoHTML;
-                if (currentConfigInfo) currentConfigInfo.innerHTML = infoHTML;
-                if (currentConfig) {
-                    currentConfig.innerHTML = `
-                        <div class="config-info">
-                            ${infoHTML}
-                        </div>
-                    `;
-                }
-            } else {
-                const errorHTML = '<div style="color: #EF4444;">❌ API ключ не настроен</div>';
-                if (configInfo) configInfo.innerHTML = errorHTML;
-                if (currentConfigInfo) currentConfigInfo.innerHTML = errorHTML;
-                if (currentConfig) {
-                    currentConfig.innerHTML = '<div class="config-info" style="color: #EF4444;">❌ API ключ не настроен. Загрузите файл настроек или введите ключ вручную.</div>';
-                }
-            }
-        }
-
-        // ===== ТЕСТИРОВАНИЕ API =====
-        async function testApiConnection() {
-            if (!currentApiKey) {
-                showStatusMessage('API ключ не настроен', 'error');
-                return;
-            }
-
-            showStatusMessage('Проверка подключения...', 'warning');
-
-            try {
-                const response = await fetch(API_CONFIG.API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${currentApiKey}`,
-                        'Content-Type': 'application/json',
-                        'HTTP-Referer': window.location.origin,
-                        'X-Title': 'MISHAGAY'
-                    },
-                    body: JSON.stringify({
-                        model: API_CONFIG.MODEL,
-                        messages: [{ role: "user", content: "Привет! Ответь 'Работает!' если ты видишь это сообщение." }],
-                        max_tokens: 10
-                    })
-                });
-
-                if (response.ok) {
-                    showStatusMessage('✅ Подключение к API успешно установлено', 'success');
-                } else {
-                    const error = await response.text();
-                    console.error('API Error:', error);
-                    showStatusMessage(`❌ Ошибка API: ${response.status}`, 'error');
-                }
-            } catch (error) {
-                console.error('Connection error:', error);
-                showStatusMessage(`❌ Ошибка сети: ${error.message}`, 'error');
             }
         }
 
@@ -2443,16 +2243,12 @@
                     renderCities();
                     break;
                 case 'ai-guide':
-                    updateApiConfigDisplay();
                     setTimeout(() => {
                         const chatInput = document.getElementById('chatInput');
                         if (chatInput) {
                             chatInput.focus();
                         }
                     }, 100);
-                    break;
-                case 'settings':
-                    updateApiConfigDisplay();
                     break;
                 case 'generator':
                     updateTimeValue(3);
@@ -2526,44 +2322,44 @@
             const modalContent = document.getElementById('modalContent');
 
             modalContent.innerHTML = `
-                <h2 style="color: var(--text-light); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <h2 style="color: var(--text-light); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;">
                     ${cityData.icon} ${cityName}
                 </h2>
 
-                <div class="city-rating" style="margin: 1rem 0; font-size: 1.1rem;">
+                <div class="city-rating" style="margin: 1.25rem 0; font-size: 1.125rem;">
                     <span class="rating-stars">${renderStars(cityData.rating)}</span>
                     <span>${cityData.rating.toFixed(1)} из 5 (${cityData.reviews.length} отзывов)</span>
                 </div>
 
-                <div style="margin: 1.5rem 0;">
-                    <h3 style="color: var(--primary-accent); margin-bottom: 0.75rem;">🏛️ Достопримечательности:</h3>
-                    <div style="display: grid; grid-template-columns: 1fr; gap: 0.5rem;">
+                <div style="margin: 2rem 0;">
+                    <h3 style="color: var(--primary-accent); margin-bottom: 1rem; font-size: 1.25rem;">🏛️ Достопримечательности:</h3>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 0.75rem;">
                         ${cityData.attractions.map(attr => `
-                            <div style="background: rgba(189, 232, 245, 0.1); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--primary-accent);">
+                            <div style="background: rgba(189, 232, 245, 0.1); padding: 1rem; border-radius: 12px; border: 1px solid var(--primary-accent);">
                                 • ${attr}
                             </div>
                         `).join('')}
                     </div>
                 </div>
 
-                <div style="margin: 1.5rem 0;">
-                    <h3 style="color: var(--primary-accent); margin-bottom: 0.75rem;">⭐ Отзывы посетителей:</h3>
+                <div style="margin: 2rem 0;">
+                    <h3 style="color: var(--primary-accent); margin-bottom: 1rem; font-size: 1.25rem;">⭐ Отзывы посетителей:</h3>
                     ${cityData.reviews.map(review => `
-                        <div style="background: rgba(28, 77, 141, 0.3); padding: 0.75rem; border-radius: 10px; margin-bottom: 0.75rem; border: 1px solid var(--primary-accent);">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.375rem;">
+                        <div style="background: rgba(28, 77, 141, 0.3); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid var(--primary-accent);">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                                 <strong style="color: var(--primary-accent);">👤 ${review.author}</strong>
                                 <span class="rating-stars">${renderStars(review.rating)}</span>
                             </div>
-                            <div style="color: var(--text-muted); font-size: 0.9rem;">${review.text}</div>
+                            <div style="color: var(--text-muted); font-size: 0.95rem;">${review.text}</div>
                         </div>
                     `).join('')}
                 </div>
 
-                <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap;">
-                    <button class="button" onclick="generateCityRoute('${cityName}'); closeModal();" style="flex: 1; min-width: 120px;">
+                <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                    <button class="button" onclick="generateCityRoute('${cityName}'); closeModal();" style="flex: 1; min-width: 140px;">
                         <span>🗺️</span> Создать маршрут
                     </button>
-                    <button class="button button-primary" onclick="showScreen('ai-guide'); closeModal(); setTimeout(() => document.getElementById('chatInput').value = 'Расскажи о городе ${cityName}', 100);" style="flex: 1; min-width: 120px;">
+                    <button class="button button-primary" onclick="showScreen('ai-guide'); closeModal(); setTimeout(() => document.getElementById('chatInput').value = 'Расскажи о городе ${cityName}', 100);" style="flex: 1; min-width: 140px;">
                         <span>🤖</span> Спросить AI
                     </button>
                 </div>
@@ -2651,7 +2447,7 @@
                     </div>
                 </div>
 
-                <h3 style="color: var(--primary-accent); margin-bottom: 1rem;">🗺️ Маршрут осмотра:</h3>
+                <h3 style="color: var(--primary-accent); margin-bottom: 1.25rem; font-size: 1.25rem;">🗺️ Маршрут осмотра:</h3>
 
                 <div class="route-points">
                     ${selectedAttractions.map((attr, index) => `
@@ -2744,12 +2540,6 @@
                 return;
             }
 
-            if (!currentApiKey) {
-                showStatusMessage('Пожалуйста, сначала загрузите API ключ в настройках', 'error');
-                showScreen('ai-guide');
-                return;
-            }
-
             // Добавление сообщения пользователя
             addChatMessage(message, 'user');
             input.value = '';
@@ -2761,22 +2551,6 @@
             const typingIndicator = addTypingIndicator();
 
             try {
-                // Получаем текущие настройки
-                const model = document.getElementById('aiModel').value || API_CONFIG.MODEL;
-                const reasoningEnabled = document.getElementById('enableReasoning').checked;
-                
-                // Обновляем конфигурацию
-                API_CONFIG.MODEL = model;
-                API_CONFIG.REASONING = reasoningEnabled;
-                
-                // Сохраняем настройки
-                localStorage.setItem('gidik_api_config', JSON.stringify({
-                    apiKey: currentApiKey,
-                    model: model,
-                    reasoning: reasoningEnabled,
-                    timestamp: new Date().toISOString()
-                }));
-
                 // Подготовка системного сообщения
                 const systemMessage = {
                     role: "system",
@@ -2800,7 +2574,8 @@
                     4. Упоминай практическую информацию (время работы, цены, как добраться)
                     5. Если вопрос не связан с Ивановской областью, вежливо предложи вернуться к теме региона
                     6. Используй эмодзи для наглядности
-                    7. Форматируй ответ с помощью маркеров и абзацев`
+                    7. Форматируй ответ с помощью маркеров и абзацев
+                    8. Будь креативным и дружелюбным`
                 };
 
                 // Подготовка сообщений для API
@@ -2812,38 +2587,22 @@
 
                 // Подготовка тела запроса
                 const requestBody = {
-                    model: model,
+                    model: API_CONFIG.MODEL,
                     messages: messages,
-                    max_tokens: 1500,
-                    temperature: 0.7
+                    max_tokens: 2000,
+                    temperature: 0.8
                 };
 
                 // Добавляем reasoning, если включено
-                if (reasoningEnabled) {
+                if (API_CONFIG.REASONING) {
                     requestBody.reasoning = { enabled: true };
-                    
-                    // Добавляем reasoning_details из истории, если есть
-                    const lastAssistantMessage = chatHistory
-                        .filter(msg => msg.role === 'assistant')
-                        .pop();
-                    
-                    if (lastAssistantMessage && lastAssistantMessage.reasoning_details) {
-                        // Находим индекс последнего сообщения ассистента в messages
-                        const lastAssistantIndex = messages.findIndex(msg => 
-                            msg.role === 'assistant' && msg.content === lastAssistantMessage.content
-                        );
-                        
-                        if (lastAssistantIndex !== -1) {
-                            messages[lastAssistantIndex].reasoning_details = lastAssistantMessage.reasoning_details;
-                        }
-                    }
                 }
 
                 // Отправка запроса к OpenRouter API
                 const response = await fetch(API_CONFIG.API_URL, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${currentApiKey}`,
+                        'Authorization': `Bearer ${API_CONFIG.OPENROUTER_API_KEY}`,
                         'Content-Type': 'application/json',
                         'HTTP-Referer': window.location.origin,
                         'X-Title': 'MISHAGAY'
@@ -2857,7 +2616,6 @@
                 if (response.ok) {
                     const result = await response.json();
                     const aiResponse = result.choices[0]?.message?.content || 'Извините, не удалось получить ответ.';
-                    const reasoning_details = result.choices[0]?.message?.reasoning_details;
 
                     // Добавление ответа AI в чат
                     addChatMessage(aiResponse, 'ai');
@@ -2866,8 +2624,7 @@
                     chatHistory.push({ role: "user", content: message });
                     chatHistory.push({ 
                         role: "assistant", 
-                        content: aiResponse,
-                        reasoning_details: reasoning_details 
+                        content: aiResponse
                     });
 
                     // Ограничение истории
@@ -2980,11 +2737,8 @@
 
         function clearLocalStorage() {
             if (confirm('Вы уверены, что хотите очистить все локальные данные?')) {
-                localStorage.removeItem('gidik_api_config');
                 localStorage.removeItem('gidik_chat_history');
-                currentApiKey = '';
                 chatHistory = [];
-                updateApiConfigDisplay();
                 showStatusMessage('Локальные данные очищены', 'success');
             }
         }
@@ -2992,11 +2746,7 @@
         function resetApp() {
             if (confirm('Вы уверены, что хотите сбросить приложение к начальным настройкам?')) {
                 localStorage.clear();
-                currentApiKey = '';
                 chatHistory = [];
-                API_CONFIG.OPENROUTER_API_KEY = '';
-                API_CONFIG.MODEL = 'deepseek/deepseek-chat-v3-0324:free';
-                API_CONFIG.REASONING = true;
 
                 // Сброс формы
                 document.getElementById('routeForm')?.reset();
@@ -3015,14 +2765,6 @@
                     `;
                 }
 
-                // Сброс настроек
-                const modelSelect = document.getElementById('aiModel');
-                if (modelSelect) modelSelect.value = API_CONFIG.MODEL;
-                
-                const reasoningCheckbox = document.getElementById('enableReasoning');
-                if (reasoningCheckbox) reasoningCheckbox.checked = API_CONFIG.REASONING;
-
-                updateApiConfigDisplay();
                 showStatusMessage('Приложение сброшено к начальным настройкам', 'success');
                 showScreen('home');
             }
@@ -3030,23 +2772,6 @@
 
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         document.addEventListener('DOMContentLoaded', async function() {
-            // Загрузка сохраненной конфигурации
-            const savedConfig = localStorage.getItem('gidik_api_config');
-            if (savedConfig) {
-                try {
-                    const config = JSON.parse(savedConfig);
-                    currentApiKey = config.apiKey || '';
-                    API_CONFIG.OPENROUTER_API_KEY = currentApiKey;
-                    API_CONFIG.MODEL = config.model || API_CONFIG.MODEL;
-                    API_CONFIG.REASONING = config.reasoning !== undefined ? config.reasoning : API_CONFIG.REASONING;
-                } catch (error) {
-                    console.error('Error loading config:', error);
-                }
-            } else {
-                // Пытаемся загрузить настройки из файла settings.txt
-                await loadSettingsFromFile();
-            }
-
             // Загрузка истории чата
             const savedChatHistory = localStorage.getItem('gidik_chat_history');
             if (savedChatHistory) {
@@ -3061,19 +2786,6 @@
             // Инициализация
             renderCities();
             updateTimeValue(3);
-            updateApiConfigDisplay();
-
-            // Устанавливаем значения в UI
-            const modelSelect = document.getElementById('aiModel');
-            const reasoningCheckbox = document.getElementById('enableReasoning');
-            
-            if (modelSelect) {
-                modelSelect.value = API_CONFIG.MODEL;
-            }
-            
-            if (reasoningCheckbox) {
-                reasoningCheckbox.checked = API_CONFIG.REASONING;
-            }
 
             // Закрытие модального окна
             document.getElementById('modal').addEventListener('click', function(e) {
@@ -3109,6 +2821,7 @@
             });
 
             console.log('Приложение "Гидик" успешно инициализировано');
+            console.log('Используемая модель:', API_CONFIG.MODEL);
         });
     </script>
 </body>

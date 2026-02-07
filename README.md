@@ -1,7 +1,4 @@
 Гидик — AI-проводник по Ивановской области
-https://img.shields.io/badge/%D0%93%D0%B8%D0%B4%D0%B8%D0%BA-AI--%D0%B3%D0%B8%D0%B4-blue
-https://img.shields.io/badge/%D0%92%D0%B5%D1%80%D1%81%D0%B8%D1%8F-2.0-green
-https://img.shields.io/badge/%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F-MIT-yellow
 
 Мобильное веб-приложение с искусственным интеллектом для создания маршрутов и получения информации о городах Ивановской области.
 
